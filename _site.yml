@@ -1,0 +1,35 @@
+name: "CursoR2024"
+navbar:
+  left:
+    - text: "Home"
+      href: "index.html"
+    - text: "Contenido"  
+      href: "Temario.html"  
+    - text: "U1"
+      href: "Instalacion.html"
+    - text: "U2"
+      href: "U2_Conceptos_básicos.html"
+    - text: "U3"
+      href: "U3_Estructuras_de_datos.html"
+    - text: "U4"
+      href: "U4_ImportarExportarDatos.html"
+    - text: "U5"
+      href: "U5.1_CondicionesBucles.html"
+    - text: "U6"
+      href: "U6_GraficosR.html"
+    - text: "U7"
+      href: "U7_tStudent.html"
+  right:
+    - text: "Rubén Muñoz"
+  type: inverse
+output: 
+ html_document:
+   theme: cerulean
+   fig_caption: yes
+   toc: yes
+   toc_float: yes
+   toc_depth: 3
+   
+
+ 
+      

@@ -1,0 +1,30 @@
+body {
+    font-family: 'Verdana', sans-serif;
+    font-size: 20px;
+}
+/* Estilo básico para el pie de página */
+footer {
+  background-color: #04488b; /* Color de fondo */
+  padding: 20px; /* Espaciado interno */
+  text-align: center; /* Alineación del texto */ /* Fijar el pie de página en la parte inferior */
+  width: 100%; /* Ancho completo */
+  bottom: 0; /* Pegado al fondo de la ventana */
+}
+
+/* Estilo para el texto del pie de página */
+.Copyright {
+  margin: 0; /* Eliminar el margen predeterminado del párrafo */
+  font-size: 14px; /* Tamaño del texto */
+  color: white; /* Color del texto */
+}
+
+.img {
+    text-align: center;
+    width: 70%;
+    vertical-align: top;
+    margin: 5% auto;
+    padding: 30px 20px;
+    box-sizing: border-box;
+    border: 2px solid #04488b;
+    border-radius: 20px;
+}
