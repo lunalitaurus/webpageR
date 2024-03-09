@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Rubén Muñoz" />
+
+<meta name="date" content="2024-01-24" />
+
+<title>Unidad 2: Conceptos básicos</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Temario.html">Contenido</a>
+</li>
+<li>
+  <a href="Instalacion.html">U1</a>
+</li>
+<li>
+  <a href="U2_Conceptos_básicos.html">U2</a>
+</li>
+<li>
+  <a href="U3_Estructuras_de_datos.html">U3</a>
+</li>
+<li>
+  <a href="U4_ImportarExportarDatos.html">U4</a>
+</li>
+<li>
+  <a href="U5.1_CondicionesBucles.html">U5</a>
+</li>
+<li>
+  <a href="U6_GraficosR.html">U6</a>
+</li>
+<li>
+  <a href="U7_tStudent.html">U7</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown-header">Rubén Muñoz</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Unidad 2: Conceptos básicos</h1>
+<h4 class="author">Rubén Muñoz</h4>
+<h4 class="date">2024-01-24</h4>
+
+</div>
+
+
+<hr />
+<div style="text-align:center">
+<p><img
+src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/RStudio_logo_flat.svg/1280px-RStudio_logo_flat.svg.png"
+style="width:20.0%" /></p>
+</div>
+<div id="bienvenida" class="section level2">
+<h2>Bienvenida</h2>
+<p>En esta sesión veremos los <strong>Conceptos básicos de
+R</strong></p>
+</div>
+<div id="consola-de-r" class="section level2">
+<h2><strong>Consola de R</strong></h2>
+<p>Una vez hayamos descargado R veremos la consola de la siguiente
+forma:<br />
+<img src="https://rafalab.dfci.harvard.edu/dslibro/R/img/R_console.png"
+alt="Consola de R" /></p>
+<p>En ésta se puede trabajar por ejemplo si sumamos dos números de la
+sig. manera:</p>
+<pre class="r"><code>1 + 1 # Aquí utilizamos el operador &quot;+&quot;</code></pre>
+<pre><code>## [1] 2</code></pre>
+</div>
+<div id="interfaz-con-rstudio" class="section level2">
+<h2><strong>Interfaz con RStudio</strong></h2>
+<p>Sin embargo, R Studio nos proporciona una interfaz amigable e
+intituiva donde podemos trabajar de forma más eficiente:</p>
+<div class="float">
+<img src="imagenes/interfaz_RStudio.png" alt="Interfaz_RStudio" />
+<div class="figcaption">Interfaz_RStudio</div>
+</div>
+</div>
+<div id="objetos" class="section level2">
+<h2><strong>Objetos</strong></h2>
+<p>Todo los datos y estructuras en R son objetos, con ellos trabajaremos
+con ellos desde constantes hasta estructuras de datos.</p>
+</div>
+<div id="constantes-y-variables" class="section level2">
+<h2><strong>Constantes y variables</strong></h2>
+<p>Una constante es un objeto cuyo valor se encuentra definido y no
+podemos cambiar. Al contrario una <strong>variable</strong> es un objeto
+al cual podemos asignarle un valor y un identificador.<br />
+Para declarar una variable se puede hacer de la siguiente forma con los
+símbolos <code>&lt;-</code>:</p>
+<pre class="r"><code>variable &lt;- 5 # Esta es la forma más común
+variable = 5
+5 -&gt; variable</code></pre>
+<p>Sin embargo, por convención se usa la primera. Al realizar esta
+asiganción también podemos generar un vector, el cual es un objeto que
+puede contener dentro de él más datos. Por lo que podemos hacer un
+vector con varios números con la función <code>c()</code> (Se deben
+separar los elementos por comas):</p>
+<pre class="r"><code> v1 &lt;- c(5,3,2,100) # Puede contener enteros
+ v2 &lt;- c(1:5, 1.5,100) # O números enteros y decimales
+ print(v1)</code></pre>
+<pre><code>## [1]   5   3   2 100</code></pre>
+<pre class="r"><code> v1</code></pre>
+<pre><code>## [1]   5   3   2 100</code></pre>
+</div>
+<div id="tipos-de-datos" class="section level2">
+<h2><strong>Tipos de datos</strong></h2>
+<p>En R hay diferentes tipos de datos, los cuales son muy importantes
+conocer porque serán los que nos permitan trabajar con ellos
+posteriormente.</p>
+<div id="enteros-y-numéricos" class="section level3">
+<h3>Enteros y numéricos</h3>
+<p>Como su nombre lo indica los <strong>enteros</strong> representan a
+los números enteros, mientras que los <strong>numéricos</strong>
+presentan una parte decimal.</p>
+<pre><code>## [1] 1</code></pre>
+<pre><code>## [1] 1.55</code></pre>
+</div>
+<div id="cadenas-de-texto" class="section level3">
+<h3>Cadenas de texto</h3>
+<p>Éstas son del tipo <em>character</em> y podemos asignarlas a
+variables si las delimitamos por comillas dobles o simples:</p>
+<pre class="r"><code> cadena &lt;- &quot;Hola:)&quot;</code></pre>
+<p>De igual forma podemos hacer un vector con cadenas de texto.</p>
+</div>
+<div id="factor" class="section level3">
+<h3>Factor</h3>
+<p>Los <strong>factores</strong> son datos que nos sirven para
+representar datos categóricos. La forma de generarlos es a traves
+de:</p>
+<pre class="r"><code> ejemplo_factor &lt;- factor(c(&quot;F&quot;, &quot;M&quot;, &quot;F&quot;, &quot;F&quot;)) #Usando factor() podemos definir un factor
+ ejemplo_factor</code></pre>
+<pre><code>## [1] F M F F
+## Levels: F M</code></pre>
+</div>
+<div id="lógico" class="section level3">
+<h3>Lógico</h3>
+<p>Son objetos con dos únicos valores <code>TRUE</code> o
+<code>FALSE</code>. Y se usan para verificar condiciones.</p>
+</div>
+<div id="na-y-null" class="section level3">
+<h3>NA y NULL</h3>
+<p>Los <code>NA</code> se usan para representar datos perdidos, mientras
+que <code>NULL</code> representa la ausencia de datos.</p>
+</div>
+<div id="verificar-tipo-de-datos" class="section level3">
+<h3>Verificar tipo de datos</h3>
+<p>Para verificar el tipo de dato con el que estamos trabajando usaremos
+la función <code>class()</code>:</p>
+<pre class="r"><code> class(variable)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code> class(v1)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code> class(cadena)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code> class(ejemplo_factor)</code></pre>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<pre class="r"><code> class(TRUE)</code></pre>
+<pre><code>## [1] &quot;logical&quot;</code></pre>
+</div>
+<div id="operaciones-básicas" class="section level3">
+<h3>Operaciones básicas</h3>
+<p>Se pueden hacer distitntas operaciones dependiendo el tipo de dato
+que trabajemos.</p>
+<pre class="r"><code>6 + 6 #Suma</code></pre>
+<pre><code>## [1] 12</code></pre>
+<pre class="r"><code>6-2 #Resta</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>6/2 #División</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>6^2 # Potencia (teclas AltGr+Ñ)</code></pre>
+<pre><code>## [1] 36</code></pre>
+<pre class="r"><code>sqrt(6) # Raíz cuadrada</code></pre>
+<pre><code>## [1] 2.44949</code></pre>
+<pre class="r"><code>6&gt;2 #Mayor que. Devuelve TRUE si la condición se cumple</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>6 &gt;= 2 # Mayor o igual</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>6 &lt; 2 #Menor </code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>6 &lt;= 2</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>6 == 2 # Igual</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>&quot;hola&quot; == &quot;hola&quot; # La condición de igualdad tmb se puede aplicar a cadenas de textos para saber si son iguales</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>6 != 5 # Es diferente de</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="coerción" class="section level3">
+<h3>Coerción</h3>
+<p>Se refiere a volver un dato de cierto tipo (sea numérico, string,
+etc) a otra clase. Usualmente usamos la función <code>as.x()</code>. Por
+ejemplo:</p>
+<pre class="r"><code> class(5) # Es un número</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code> class(&quot;5&quot;) # COmo esta en comillas es un Character</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code># Usaremos la función as.numeric() para convertir de cadena de texto a numérico
+ as.numeric(&quot;5&quot;) + 5 # Así convertimos un número como cadena hacia ser un número para operar</code></pre>
+<pre><code>## [1] 10</code></pre>
+<p>Las funciones <code>as.()</code> pueden ser
+<code>as.numeric()</code>, <code>as.integer()</code>,
+<code>as.factor()</code>, entre otras.</p>
+</div>
+<div id="paquetes" class="section level3">
+<h3>Paquetes</h3>
+<p>Un paquete se conforma por un conjunto de funciones y datos que se
+pueden instalar y usar en nuestro R. Para descargar un paquete por
+primera vez se usa
+<code>install.packages("nombre_del_paquete_entre_comillas")</code>.<br />
+Para usarlos se deben llamar, con la función
+<code>library(nombre_del_paquete_sin comillas)</code> siempre que se
+quiera usar.</p>
+</div>
+<div id="funciones-introducción-básica" class="section level3">
+<h3>Funciones (introducción básica)</h3>
+<p>¿Para qué sirven? Las funciones son líneas de código que aceptan
+parámetros para ejecutar una acción determinada con dichos valores. En R
+hay una gran variedad de funciones aunque también podríamos generar las
+propias.</p>
+</div>
+<div id="funciones-básicas-por-defecto" class="section level3">
+<h3>Funciones básicas por defecto</h3>
+<p>En R existen funciones precargadas cuando lo instalamos. Ejemplo de
+éstas y que nos pueden servir para este curso son:</p>
+<pre class="r"><code>#Creamos un vector para mostrarles
+e1 &lt;- c( 4, 5, 4.555, 6:20)
+ length(e1) # número de elementos
+ head(e1) # Primeros renglones de un conjunto de datos
+ tail(e1) # Ultimos renglones de un conjunto de datos
+ sum(e1)  # Suma los valores dados
+ max(e1)  # Número máximo
+ min(e1)  # Mínimo
+ range(e1) # Rango (max y min)
+ table(e1) # Cuenta el número de veces que un valor aparece
+ mean(e1) # Media 
+ median(e1) # Mediana
+ round(e1, 2) #Redondea los valores a los decimales que indiquemos
+ summary(e1) # Resume los aspectos más relevantes de nuestros datos</code></pre>
+<div
+id="con-el-conocimiento-que-tenemos-hasta-ahora-ya-podríamos-hacer-algunas-operaciones-básicas-y-generar-variables-para-trabajar.-nos-vemos-en-la-siguiente-unidad."
+class="section level5">
+<h5>Con el conocimiento que tenemos hasta ahora ya podríamos hacer
+algunas operaciones básicas y generar variables para trabajar. ¡Nos
+vemos en la siguiente unidad!.</h5>
+<div style="text-align:center">
+<div class="float">
+<img src="imagenes/kitty_glasses.png" style="width:25.0%"
+alt="Cute Kitty says goodbye" />
+<div class="figcaption">Cute Kitty says goodbye</div>
+</div>
+</div>
+<footer>
+<p style="text-align: center; class="Copyright"> &copy Copyright Cursos Lic. Rubén Muñoz 2024</p>
+<p class="Copyright" style="text-align: center;">
+<em><a href="mailto:mrubenClasesR@gmail.com"
+class="email">mrubenClasesR@gmail.com</a></em>
+</p>
+</footer>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
