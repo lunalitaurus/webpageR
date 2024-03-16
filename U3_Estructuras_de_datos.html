@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Rubén Muñoz" />
+
+<meta name="date" content="2024-01-24" />
+
+<title>Unidad 3: Estructura de datos</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Temario.html">Contenido</a>
+</li>
+<li>
+  <a href="Instalacion.html">U1</a>
+</li>
+<li>
+  <a href="U2_Conceptos_básicos.html">U2</a>
+</li>
+<li>
+  <a href="U3_Estructuras_de_datos.html">U3</a>
+</li>
+<li>
+  <a href="U4_ImportarExportarDatos.html">U4</a>
+</li>
+<li>
+  <a href="U5.1_CondicionesBucles.html">U5</a>
+</li>
+<li>
+  <a href="U6_GraficosR.html">U6</a>
+</li>
+<li>
+  <a href="U7_tStudent.html">U7</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown-header">Rubén Muñoz</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Unidad 3: Estructura de datos</h1>
+<h4 class="author">Rubén Muñoz</h4>
+<h4 class="date">2024-01-24</h4>
+
+</div>
+
+
+<hr />
+<div id="en-esta-lección-aprederemos-acerca-de-las-estructuras-de-datos"
+class="section level4">
+<h4>En esta lección aprederemos acerca de las <strong>estructuras de
+datos</strong>:)</h4>
+<div style="text-align:center">
+<div class="float">
+<img src="imagenes/kitty_in_R.jpg" style="width:25.0%"
+alt="Cute Kitty using R" />
+<div class="figcaption">Cute Kitty using R</div>
+</div>
+</div>
+</div>
+<div id="vectores" class="section level2">
+<h2><strong>Vectores</strong></h2>
+<p>Como mencionamos la unidad anterior, los vectores son objetos en R
+que pueden almacenar datos del mismo tipo. Se definen principalmente por
+la función <code>c()</code> y pueden aceptar otros vectores dentro de
+sí. Por ejemplo:</p>
+<pre class="r"><code>v1 &lt;- c(&quot;Tavito&quot;, &quot;Camila&quot;)
+v2 &lt;- c(v1, &quot;2&quot;, &quot;Manzana&quot;)</code></pre>
+<pre class="r"><code>print(v2)</code></pre>
+<pre><code>## [1] &quot;Tavito&quot;  &quot;Camila&quot;  &quot;2&quot;       &quot;Manzana&quot;</code></pre>
+<div id="propiedades-básicas" class="section level3">
+<h3>Propiedades básicas</h3>
+<p>Sus propiedades pricnipales son <em>Clase</em> ya que solo acepta un
+solo tipo de datos y <em>Longitud</em> (o largo), es decir, el número de
+elementos que tiene.</p>
+</div>
+<div id="creación-y-acceso-a-vectores" class="section level3">
+<h3>Creación y acceso a vectores</h3>
+<p>Como se mencionó, se definen principalmente por la función
+<code>c()</code> y pueden aceptar otros vectores dentro de sí. Para
+acceder a cada uno de sus elementos se usa el símbolo
+<code>[]</code></p>
+<pre class="r"><code># Por ejemplo para ver el primer elemento del vector v2
+ v2[1]</code></pre>
+<pre><code>## [1] &quot;Tavito&quot;</code></pre>
+<pre class="r"><code># Para acceder al primer y tercer elemento
+ v2[c(1,3)]</code></pre>
+<pre><code>## [1] &quot;Tavito&quot; &quot;2&quot;</code></pre>
+</div>
+<div id="operaciones-con-vectores" class="section level3">
+<h3>Operaciones con vectores</h3>
+<p>Si tenemos un vector le podemos aplicar una operación a cada elemento
+y podemos guardar el resultado en otro vector. Por ejemplo:</p>
+<pre class="r"><code>v3 &lt;- c(1:10)
+(v3_result &lt;- v3*2) #Dato: poner entre paréntesis un vector permite que se imprima en la consola siempre que se corra esa línea.</code></pre>
+<pre><code>##  [1]  2  4  6  8 10 12 14 16 18 20</code></pre>
+</div>
+</div>
+<div id="matrices" class="section level2">
+<h2><strong>Matrices</strong></h2>
+<p>En R una matriz es descrito como un vector multidimensional.</p>
+<div id="propiedades-básicas-1" class="section level3">
+<h3>Propiedades básicas</h3>
+<p>Tienen una <em>Clase</em>, un <em>largo</em> y un <em>alto</em>. Es
+decir, tienen datos en renglones y columnas, pero de un solo tipo.</p>
+</div>
+<div id="creación-y-acceso-a-matrices" class="section level3">
+<h3>Creación y acceso a matrices</h3>
+<p>Para crear una matriz usamos la función <code>matrix()</code>.</p>
+<pre class="r"><code># Crearemos una matriz usando nuestro vector 3
+## Primero colocamos nuestro vector dentro de la función
+### Después, con nrow = y ncol = podemos decidir cuántos renglones y columnas tener
+ matriz_1 &lt;- matrix(v3, nrow = 5) #Matriz con 5 renglones y 2 columnas
+ matrix(v3, ncol = 5) #Matriz con 5 columnas</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    1    3    5    7    9
+## [2,]    2    4    6    8   10</code></pre>
+<pre class="r"><code># Para asignarles nombres a columnas y renglones usamos las funciones 
+colnames(matriz_1) &lt;- c(&quot;C1&quot;, &quot;C2&quot;)
+rownames(matriz_1) &lt;- c(&quot;R1&quot;, &quot;R2&quot;, 
+                        &quot;R3&quot;, &quot;R4&quot;,
+                        &quot;R5&quot;)
+matriz_1 # Vemos los nuevos nombres de mis columnas y renglones</code></pre>
+<pre><code>##    C1 C2
+## R1  1  6
+## R2  2  7
+## R3  3  8
+## R4  4  9
+## R5  5 10</code></pre>
+<p>Para acceder a sus elemetos podemos hacerlo como en un vector. Sin
+embargo aquí podemos especificar sus dimensiones, siempre se comienza
+por renglones.</p>
+<pre class="r"><code>matriz_1[1,1] # Así se accede al primer elemento</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>matriz_1[1,2] # Así accedemos al primer elemento de la segunda columna</code></pre>
+<pre><code>## [1] 6</code></pre>
+<pre class="r"><code>matriz_1[1,] # Así accedemos a todos los elementos de un renglón</code></pre>
+<pre><code>## C1 C2 
+##  1  6</code></pre>
+<pre class="r"><code>matriz_1[ , &quot;C1&quot;] # De esta forma elegimos todos los valores especificando el nombre</code></pre>
+<pre><code>## R1 R2 R3 R4 R5 
+##  1  2  3  4  5</code></pre>
+</div>
+<div id="operaciones-con-matrices" class="section level3">
+<h3>Operaciones con matrices</h3>
+<p>Al igual que los vectores, si tenemos una matriz con números podemos
+multiplicarla, sumarla, dividirla, etc.</p>
+<pre class="r"><code>(matriz_result &lt;- matriz_1 * 3) # Multiplicamos por 3 para obtener una nueva matriz</code></pre>
+<pre><code>##    C1 C2
+## R1  3 18
+## R2  6 21
+## R3  9 24
+## R4 12 27
+## R5 15 30</code></pre>
+<pre class="r"><code>#También podemos transponerla con la función t()
+(matriz_result_t &lt;- t(matriz_result))</code></pre>
+<pre><code>##    R1 R2 R3 R4 R5
+## C1  3  6  9 12 15
+## C2 18 21 24 27 30</code></pre>
+</div>
+</div>
+<div id="data-frames" class="section level2">
+<h2><strong>Data frames</strong></h2>
+<div id="propiedades-principales" class="section level3">
+<h3>Propiedades principales</h3>
+<p>Los data frames son como las matrices, con renglones y columnas. No
+obstante, éstas sí pueden contener datos de diferentes tipos. Las
+columnas deben ser del mismo tipo pero pueden variar entre ellas. Su
+<em>Clase</em> corresponde a <em>data.frame</em>.</p>
+</div>
+<div id="creación-y-acceso-a-dataframes" class="section level3">
+<h3>Creación y acceso a dataframes</h3>
+<p>Para crearlos usamos la función <code>data.frame()</code></p>
+<pre class="r"><code> mi_df &lt;- data.frame(
+  &quot;entero&quot; = 1:4,
+  &quot;numerico&quot; = c(1.4, 3.4, 4.9, 3.3), 
+  &quot;cadena&quot; = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;),
+  &quot;factor&quot; = factor(c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;))
+ )
+mi_df</code></pre>
+<pre><code>##   entero numerico cadena factor
+## 1      1      1.4      a      a
+## 2      2      3.4      b      b
+## 3      3      4.9      c      c
+## 4      4      3.3      d      d</code></pre>
+</div>
+<div id="manipulación-básica" class="section level3">
+<h3>Manipulación básica</h3>
+<p>Para acceder a sus elementos podemos usar <code>[]</code> o el
+símbolo <code>$</code> para seleccionar columnas.</p>
+<pre class="r"><code>mi_df[1,1] # Así accedemos al primer elemento de la primer columna</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code> # Así a la primer columna
+mi_df[1]</code></pre>
+<pre><code>##   entero
+## 1      1
+## 2      2
+## 3      3
+## 4      4</code></pre>
+<pre class="r"><code>#Accedemos a la primer columna por nombre usando &quot;$&quot;
+mi_df$entero</code></pre>
+<pre><code>## [1] 1 2 3 4</code></pre>
+<pre class="r"><code># Acceso al primer renglón
+mi_df[1, ]</code></pre>
+<pre><code>##   entero numerico cadena factor
+## 1      1      1.4      a      a</code></pre>
+<pre class="r"><code>#Así vemos sólo dos columnas. La 2 y 3
+mi_df[,c(2,3)]</code></pre>
+<pre><code>##   numerico cadena
+## 1      1.4      a
+## 2      3.4      b
+## 3      4.9      c
+## 4      3.3      d</code></pre>
+<pre class="r"><code>#Así vemos las columnas la 2 y 3 especificando su nombre
+mi_df[,c(&quot;numerico&quot;,&quot;cadena&quot;)] </code></pre>
+<pre><code>##   numerico cadena
+## 1      1.4      a
+## 2      3.4      b
+## 3      4.9      c
+## 4      3.3      d</code></pre>
+<pre class="r"><code># Así vemos un elemento específico en una columna
+## Vemos el segundo dato de la columna &quot;factor&quot;
+mi_df$factor[2]</code></pre>
+<pre><code>## [1] b
+## Levels: a b c d</code></pre>
+<p>De esta forma, podemos extraer info de un data frame y guardarlo en
+nuevas variables (que tendrán clase <em>data.frame</em>).</p>
+<pre class="r"><code># Extraeremos las columnas que sólo tienen números y la guardaremos en una nueva variable
+(mi_df_numeros &lt;- mi_df[c(1,2)])</code></pre>
+<pre><code>##   entero numerico
+## 1      1      1.4
+## 2      2      3.4
+## 3      3      4.9
+## 4      4      3.3</code></pre>
+<pre class="r"><code>#Así obtenemos la info que queríamos de un df más grande</code></pre>
+</div>
+<div id="listas" class="section level3">
+<h3><strong>Listas</strong></h3>
+<p>Las listas son unidimensionales pero pueden guardar objetos de muchos
+tipos, hasta pueden guardar más listas en ella.</p>
+</div>
+<div id="propiedades-principales-1" class="section level3">
+<h3>Propiedades principales</h3>
+<p>Son de clase <em>list</em> y tienen una longitud.</p>
+</div>
+<div id="creación-y-acceso-a-listas" class="section level3">
+<h3>Creación y acceso a listas</h3>
+<p>Para crearlas usamos la función <code>list()</code> y le agregamos
+objetos.</p>
+<pre class="r"><code># Crearemos una lista con los objetos que vimos en esta unidad
+mi_lista &lt;- list(v2,v3, #Son vectores
+                 matriz_1, matriz_result_t, # Matrices
+                 mi_df, mi_df_numeros) # Data frames
+#Veamos nuestra lista
+mi_lista</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;Tavito&quot;  &quot;Camila&quot;  &quot;2&quot;       &quot;Manzana&quot;
+## 
+## [[2]]
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## [[3]]
+##    C1 C2
+## R1  1  6
+## R2  2  7
+## R3  3  8
+## R4  4  9
+## R5  5 10
+## 
+## [[4]]
+##    R1 R2 R3 R4 R5
+## C1  3  6  9 12 15
+## C2 18 21 24 27 30
+## 
+## [[5]]
+##   entero numerico cadena factor
+## 1      1      1.4      a      a
+## 2      2      3.4      b      b
+## 3      3      4.9      c      c
+## 4      4      3.3      d      d
+## 
+## [[6]]
+##   entero numerico
+## 1      1      1.4
+## 2      2      3.4
+## 3      3      4.9
+## 4      4      3.3</code></pre>
+<div
+id="a-su-vez-también-podemos-ponerle-nombres-a-cada-elemento-de-mi-lista."
+class="section level5">
+<h5>A su vez también podemos ponerle nombres a cada elemento de mi
+lista.</h5>
+<pre class="r"><code># Para ello usaremos &quot;el nombre que queremos&quot; (entre comillas) seguido de &quot;=&quot; y mi objeto a agregar
+mi_lista &lt;- list(&quot;v2&quot; = v2, &quot;v3&quot; = v3, #Son vectores
+                 &quot;m1&quot; = matriz_1, &quot;m2&quot; = matriz_result_t, # Matrices
+                 &quot;df1&quot; = mi_df, &quot;df2&quot; = mi_df_numeros) # Data frames
+# Ahora nuestra lista tiene los nombres que le asignamos
+mi_lista</code></pre>
+<pre><code>## $v2
+## [1] &quot;Tavito&quot;  &quot;Camila&quot;  &quot;2&quot;       &quot;Manzana&quot;
+## 
+## $v3
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## $m1
+##    C1 C2
+## R1  1  6
+## R2  2  7
+## R3  3  8
+## R4  4  9
+## R5  5 10
+## 
+## $m2
+##    R1 R2 R3 R4 R5
+## C1  3  6  9 12 15
+## C2 18 21 24 27 30
+## 
+## $df1
+##   entero numerico cadena factor
+## 1      1      1.4      a      a
+## 2      2      3.4      b      b
+## 3      3      4.9      c      c
+## 4      4      3.3      d      d
+## 
+## $df2
+##   entero numerico
+## 1      1      1.4
+## 2      2      3.4
+## 3      3      4.9
+## 4      4      3.3</code></pre>
+</div>
+<div
+id="para-acceder-a-ellas-lo-hacemos-de-forma-similar-a-un-data-frame."
+class="section level5">
+<h5>Para <strong>acceder</strong> a ellas lo hacemos de forma similar a
+un data frame.</h5>
+<pre class="r"><code># Para acceder al primer objeto de la lista
+## En este caso es un vector con cadenas de texto
+mi_lista[1]</code></pre>
+<pre><code>## $v2
+## [1] &quot;Tavito&quot;  &quot;Camila&quot;  &quot;2&quot;       &quot;Manzana&quot;</code></pre>
+<pre class="r"><code># Para acceder a mi primer matriz con &quot;$&quot; y nombre
+mi_lista$m1</code></pre>
+<pre><code>##    C1 C2
+## R1  1  6
+## R2  2  7
+## R3  3  8
+## R4  4  9
+## R5  5 10</code></pre>
+<pre class="r"><code># Para acceder a mi segundo data frame con &quot;$&quot; y nombre
+## Eligiendo la primer columna del data frame
+mi_lista$df2$entero</code></pre>
+<pre><code>## [1] 1 2 3 4</code></pre>
+<pre class="r"><code># Para acceder a mi segundo data frame
+## Eligiendo el tercer elemento de la columna &quot;numerico&quot;
+mi_lista$df2$numerico[3]</code></pre>
+<pre><code>## [1] 4.9</code></pre>
+</div>
+<div
+id="es-así-como-hemos-terminado-esta-unidad3.-hemos-avanzado-mucho-y-hemos-adquirido-las-bases-para-emepezar-a-ver-datos-y-manipularlos.-nos-vemos-en-la-siguiente"
+class="section level5">
+<h5>Es así como hemos terminado esta Unidad3. Hemos avanzado mucho y
+hemos adquirido las bases para emepezar a ver datos y manipularlos. Nos
+vemos en la siguiente!!!</h5>
+<footer>
+<p style="text-align: center; class="Copyright"> &copy Copyright Cursos Lic. Rubén Muñoz 2024</p>
+<p class="Copyright" style="text-align: center;">
+<em><a href="mailto:mrubenClasesR@gmail.com"
+class="email">mrubenClasesR@gmail.com</a></em>
+</p>
+</footer>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Rubén Muñoz" />
+
+<meta name="date" content="2024-01-27" />
+
+<title>Unidad 4: Importar y exportar datos</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Temario.html">Contenido</a>
+</li>
+<li>
+  <a href="Instalacion.html">U1</a>
+</li>
+<li>
+  <a href="U2_Conceptos_básicos.html">U2</a>
+</li>
+<li>
+  <a href="U3_Estructuras_de_datos.html">U3</a>
+</li>
+<li>
+  <a href="U4_ImportarExportarDatos.html">U4</a>
+</li>
+<li>
+  <a href="U5.1_CondicionesBucles.html">U5</a>
+</li>
+<li>
+  <a href="U6_GraficosR.html">U6</a>
+</li>
+<li>
+  <a href="U7_tStudent.html">U7</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown-header">Rubén Muñoz</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Unidad 4: Importar y exportar datos</h1>
+<h4 class="author">Rubén Muñoz</h4>
+<h4 class="date">2024-01-27</h4>
+
+</div>
+
+
+<div id="bienvenida" class="section level2">
+<h2><strong>Bienvenida</strong></h2>
+<p>En esta lección aprederemos cómo podemos <strong>importar</strong> y
+<strong>exportar</strong> datos. Principalmente en formato <em>.csv</em>
+y <em>.txt</em>, los cuales son los formatos generales donde guardamos
+nuestros datos o se ponen a disposición de las personas. :)</p>
+<div style="text-align:center">
+<div class="float">
+<img src="imagenes/kittyInComputer.png" style="width:45.0%"
+alt="Cute Kitty using R" />
+<div class="figcaption">Cute Kitty using R</div>
+</div>
+</div>
+</div>
+<div id="directorio-de-trabajo" class="section level2">
+<h2><strong>Directorio de trabajo</strong></h2>
+<p>Un directorio de trabajo es una carpeta con una ruta en nuestro
+dispositivo en el que se alojan los archivos que usaremos y guardaremos
+para un trabajo o análisis. Podemos entrar y salir del directotio
+siempre que queramos.</p>
+<div id="conocer-directorio-actual-getwd" class="section level3">
+<h3>Conocer directorio actual <code>getwd()</code></h3>
+<p>Con la función <code>getwd()</code> al abrir R podemos saber qué
+directorio estamos usando. Sólo debemos escribirla y nos dirá la
+ruta.</p>
+<pre class="r"><code>getwd()</code></pre>
+</div>
+<div id="definir-directorio" class="section level3">
+<h3>Definir directorio</h3>
+<p>Con la función <code>setwd("C:/rutaDelDirectorio")</code> podemos
+definir un directorio específico para trabajar. Es importante colocar la
+ruta entre comillas para que R la reconozca correctamente. También se
+puede definir el directorio de trabajo en la interfaz de RStudio. Para
+ello sólo es necesario ir a la barra superior de opciones en el apartado
+<code>Session&gt;Set working directory&gt;Choose Diretory</code> (ver
+Imagen)</p>
+<div style="text-align:center">
+<div class="float">
+<img src="../imagenes/setwdRStudio.png" style="width:80.0%"
+alt="Establecer un working directory en R (directorio de trabajo)" />
+<div class="figcaption">Establecer un working directory en R (directorio
+de trabajo)</div>
+</div>
+</div>
+<p>Una vez ahí seleccionaremos la carpeta donde queremos importar o
+exportar los datos. (Nota: Es buena idea tener carpetas ordenadas sin
+nombres muy complejos ni caracteres especiales)</p>
+</div>
+</div>
+<div id="tipos-de-rutas" class="section level2">
+<h2><strong>Tipos de rutas</strong></h2>
+<p>Las rutas absolutas y las rutas relativas son dos formas de
+especificar la ubicación de un archivo o directorio en un sistema de
+archivos.</p>
+<ul>
+<li>Rutas absolutas:</li>
+</ul>
+<p>Una ruta absoluta especifica la ubicación completa de un archivo o
+directorio desde la raíz del sistema de archivos. Incluye todos los
+niveles de directorios desde la raíz hasta el archivo o directorio en
+cuestión. Ejemplo de ruta absoluta en Unix: “/home/usuario/archivo.txt”
+Ejemplo de ruta absoluta en Windows:
+“C:/Usuarios/Usuario/Documento.txt”</p>
+<ul>
+<li>Rutas relativas:</li>
+</ul>
+<p>Una ruta relativa especifica la ubicación de un archivo o directorio
+en relación con el directorio actual o de trabajo. No incluye la raíz
+del sistema de archivos; en cambio, comienza desde el directorio actual
+“.” y puede usar “referencias” como “..” para subir un nivel en la
+jerarquía de directorios. Son más cortas que las rutas absolutas, ya que
+no están vinculadas a una ubicación fija en el sistema de archivos.
+Ejemplo de ruta relativa: “../carpeta/archivo.txt” (esto se refiere al
+archivo “archivo.txt” que se encuentra dentro de la carpeta “carpeta”
+ubicada en el directorio principal actual)</p>
+<div style="text-align:center">
+<div class="float">
+<img
+src="https://www.netmentor.es/imagen/0000ea6b-5585-4ae3-a6f7-f6feb1561bd4.png"
+style="width:70.0%"
+alt="Establecer un working directory en R (directorio de trabajo)" />
+<div class="figcaption">Establecer un working directory en R (directorio
+de trabajo)</div>
+</div>
+</div>
+</div>
+<div id="leer-archivos-.csv-.txt" class="section level2">
+<h2><strong>Leer archivos: <em>.csv</em>, <em>.txt</em> </strong></h2>
+<p>Para leer archivos usamos la función
+<code>read."formato"("./rutaDelArchivo.formato")</code>. En el caso de
+que queramos leer un csv usamos la función <code>read.csv()</code>.
+Ejemplo:</p>
+<pre class="r"><code># Usamos un archivo presente en mi directorio de trabajo
+
+ read.csv(&quot;../data/baseEjemploRanitas.csv&quot;)</code></pre>
+<p>Con un archivo <em>.txt</em> usamos la función
+<code>read.table()</code> Al cargar archivos nuevos nos interesa
+almacenarlos en variables para seguirlos usando.</p>
+<pre class="r"><code># Es conveniente gurdarlo en una variable como cualquier otro objeto de R
+ ranitas &lt;- read.csv(&quot;../data/baseEjemploRanitas.csv&quot;,
+                     header = T ## Éste parámetro especifíca si tiene encabezado o no. De no tener le asigna un valor por defecto
+                    
+                      #,row.names = 1 # Éste sirve para indicar que la primer columna es el nombre de los renglones
+                     )
+
+# Ahora podemos usar la función head() para ver qué contiene
+ head(ranitas)</code></pre>
+<pre><code>##                        Species Functional.group Body.size Leg.length
+## 1       Gymnopis syntrema (De)              FG1        EL         NL
+## 2   Smilisca cyanosticta (Hy5)              FG2         L         EL
+## 3  Bolitoglossa mexicana (Pl1)              FG3         M          S
+## 4   Bolitoglossa mulleri (Pl2)              FG3         M          M
+## 5 Bolitoglossa rufescens (Pl3)              FG3         S          S
+## 6      Oedipina elongata (Pl4)              FG3         M          S
+##   Respiration.type Fertilization.type
+## 1             Lung                Int
+## 2             Lung                Ext
+## 3             Skin                Int
+## 4             Skin                Int
+## 5             Skin                Int
+## 6             Skin                Int</code></pre>
+<pre class="r"><code># Son características de ranitas, salamandras y cecilias tomadas para un artículo.</code></pre>
+</div>
+<div id="acceso-a-archivos-cargados" class="section level2">
+<h2><strong>Acceso a archivos cargados</strong></h2>
+Para ver el archivo es tan simple como escribir el nombre de la variable
+donde guardamos el archivo para que se imprima en la consola. Sin
+embarrgo en <strong>RStudio</strong> se puede hacer hacienco click dos
+veces sobre el objeto en el apartado de <strong>Data</strong> ubicado a
+la derecha de la interfaz de RStudio.
+<div style="text-align:center">
+<div class="float">
+<img src="imagenes/dataRStudio.png" style="width:60.0%" alt="Data" />
+<div class="figcaption">Data</div>
+</div>
+</div>
+Al hacer click nos enviará hacia un visualizador donde observaremos
+nuestros datos y sabremos cuántos registros tiene ,así como, ordenarlos
+en orden alfabético, etc. Nota: esto no afectará nuestro arcvhivo
+orginal, sólo es para visualizarse.<br />
+
+<div style="text-align:center">
+<div class="float">
+<img src="imagenes/dataRStudio1.png" style="width:90.0%"
+alt="CSV leído" />
+<div class="figcaption">CSV leído</div>
+</div>
+</div>
+<div id="exploración-básica" class="section level3">
+<h3>Exploración básica</h3>
+<p>Al archivo cargado podemos aplicarle diferentes funciones para saber
+sobre éste. Podemos iniciar con:</p>
+<pre class="r"><code>#Para ver sus primeros datos
+ head(ranitas)</code></pre>
+<pre><code>##                        Species Functional.group Body.size Leg.length
+## 1       Gymnopis syntrema (De)              FG1        EL         NL
+## 2   Smilisca cyanosticta (Hy5)              FG2         L         EL
+## 3  Bolitoglossa mexicana (Pl1)              FG3         M          S
+## 4   Bolitoglossa mulleri (Pl2)              FG3         M          M
+## 5 Bolitoglossa rufescens (Pl3)              FG3         S          S
+## 6      Oedipina elongata (Pl4)              FG3         M          S
+##   Respiration.type Fertilization.type
+## 1             Lung                Int
+## 2             Lung                Ext
+## 3             Skin                Int
+## 4             Skin                Int
+## 5             Skin                Int
+## 6             Skin                Int</code></pre>
+<pre class="r"><code># Para un resumen del objeto: Longitud, Clase, Nombre de los campos, etc.
+ summary(ranitas)</code></pre>
+<pre><code>##    Species          Functional.group    Body.size          Leg.length       
+##  Length:30          Length:30          Length:30          Length:30         
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##  Respiration.type   Fertilization.type
+##  Length:30          Length:30         
+##  Class :character   Class :character  
+##  Mode  :character   Mode  :character</code></pre>
+<pre class="r"><code># Para saber el nombre de las columnas
+ colnames(ranitas) #Columnas</code></pre>
+<pre><code>## [1] &quot;Species&quot;            &quot;Functional.group&quot;   &quot;Body.size&quot;         
+## [4] &quot;Leg.length&quot;         &quot;Respiration.type&quot;   &quot;Fertilization.type&quot;</code></pre>
+<pre class="r"><code> rownames(ranitas) #Renglones</code></pre>
+<pre><code>##  [1] &quot;1&quot;  &quot;2&quot;  &quot;3&quot;  &quot;4&quot;  &quot;5&quot;  &quot;6&quot;  &quot;7&quot;  &quot;8&quot;  &quot;9&quot;  &quot;10&quot; &quot;11&quot; &quot;12&quot; &quot;13&quot; &quot;14&quot; &quot;15&quot;
+## [16] &quot;16&quot; &quot;17&quot; &quot;18&quot; &quot;19&quot; &quot;20&quot; &quot;21&quot; &quot;22&quot; &quot;23&quot; &quot;24&quot; &quot;25&quot; &quot;26&quot; &quot;27&quot; &quot;28&quot; &quot;29&quot; &quot;30&quot;</code></pre>
+<pre class="r"><code># Para conocer el nombre de las especies
+ table(ranitas$Species)</code></pre>
+<pre><code>## 
+##              Smilisca baudinii\xa0 Hyalinobatrachium fleischmanni\xa0 
+##                                  1                                  1 
+##        Agalychnis callidryas (Phy)        Bolitoglossa mexicana (Pl1) 
+##                                  1                                  1 
+##         Bolitoglossa mulleri (Pl2)       Bolitoglossa rufescens (Pl3) 
+##                                  1                                  1 
+##           Craugastor alfredi (Cr1)          Craugastor laticeps (Cr2) 
+##                                  1                                  1 
+##              Craugastor loki (Cr3)          Craugastor palenque (Cr4) 
+##                                  1                                  1 
+##           Dendropsophus ebraccatus Dendropsophus microcephalus  (Hy1) 
+##                                  1                                  1 
+##      Eleutherodactylus leprus (El)          Gastrophyne elegans (Mic) 
+##                                  1                                  1 
+##             Gymnopis syntrema (De)           Incilius campbelli (Bu1) 
+##                                  1                                  1 
+##           Incilius valliceps (Bu2)       Leptodactylus fragilis (Le1) 
+##                                  1                                  1 
+##    Leptodactylus melanonotus (Le2)         Lithobates brownorum (Ra1) 
+##                                  1                                  1 
+##         Lithobates maculatus (Ra2)         Lithobates vaillanti (Ra1) 
+##                                  1                                  1 
+##            Oedipina elongata (Pl4)          Rhinella horribilis (Bu3) 
+##                                  1                                  1 
+##        Rhinophrynus dorsalis (Rhi)             Scinax staufferi (Hy3) 
+##                                  1                                  1 
+##         Smilisca cyanosticta (Hy5)           Tlalocohyla loquax (Hy7) 
+##                                  1                                  1 
+##            Tlalocohyla picta (Hy8)     Trachycephalus typhonius (Hy6) 
+##                                  1                                  1</code></pre>
+</div>
+</div>
+<div id="exportar-datos" class="section level2">
+<h2><strong>Exportar datos</strong></h2>
+<p>Para exportar nuestros datos usamos la función
+<code>write.csv()</code> o <code>write.table()</code>. R funciona como
+convertidor de formato por lo que si originalmente nuestro archivo era
+<em>.csv</em> podemos guardarlo como <em>.txt</em> Ejemplo:</p>
+<pre class="r"><code># Aquí pasamos de un .csv a un .txt
+write.table(ranitas, ## Objeto a guardar
+            file = &quot;ranitasEjemploTexto.txt&quot; ## Aquí podemos poner la ruta, si no sólo se guardará en el directorio actual
+            ## sep = &quot;Hola&quot; #Con lo que separará
+            ## row.names = &quot;&quot; Aquí podemos indicar si los valores de la primer columna servirán para darle nombre a los renglones
+            ## col.names = Nombre de las columnas
+            )</code></pre>
+<div id="terminamos-con-la-unidad-4-felicidades" class="section level5">
+<h5><strong>Terminamos con la Unidad 4 ¡Felicidades!</strong></h5>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
