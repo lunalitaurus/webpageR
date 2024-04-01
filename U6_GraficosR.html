@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Rubén Muñoz" />
+
+<meta name="date" content="2024-01-28" />
+
+<title>Unidad 6: Gráficos base en R</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Temario.html">Contenido</a>
+</li>
+<li>
+  <a href="Instalacion.html">U1</a>
+</li>
+<li>
+  <a href="U2_Conceptos_básicos.html">U2</a>
+</li>
+<li>
+  <a href="U3_Estructuras_de_datos.html">U3</a>
+</li>
+<li>
+  <a href="U4_ImportarExportarDatos.html">U4</a>
+</li>
+<li>
+  <a href="U5.1_CondicionesBucles.html">U5</a>
+</li>
+<li>
+  <a href="U6_GraficosR.html">U6</a>
+</li>
+<li>
+  <a href="U7_tStudent.html">U7</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown-header">Rubén Muñoz</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Unidad 6: Gráficos base en R</h1>
+<h4 class="author">Rubén Muñoz</h4>
+<h4 class="date">2024-01-28</h4>
+
+</div>
+
+
+<div id="bienvenida" class="section level2">
+<h2><strong>Bienvenida</strong></h2>
+<p>Bienvenidos en esta ocasión aprenderemos a hacer los principales
+gráficos en R!!</p>
+<div style="text-align:center">
+<div class="float">
+<img src="imagenes/gatoTeclado.png" style="width:30.0%" alt=":)" />
+<div class="figcaption">:)</div>
+</div>
+</div>
+<p>Para comenzar usaremos unos datos anónimos de alumnos de Bio, los
+cuales se encuentran en la carpeta <code>data</code>.</p>
+<pre class="r"><code># Los cargamos y guardamos en una variable.
+datosEstBio &lt;- read.csv(&quot;../data/Datos_alumnos.csv&quot;)
+head(datosEstBio)</code></pre>
+<pre><code>##   alumnx prom estatura peso edad   sexo edo.civil n.herm p.ciud becado
+## 1     A1  8.0     1.78   62   21 Hombre       Sin      1    Sur     No
+## 2     A2  7.7     1.50   46   22  Mujer       Sin      0    Sur     No
+## 3     A3  7.9     1.60   46   20  Mujer       Sin      1    Sur     Si
+## 4     A4  9.0     1.55   48   19  Mujer       Sin      3    Sur     Si
+## 5     A5  7.6     1.58   49   20  Mujer       Con      2   Este     Si
+## 6     A6  8.0     1.59   49   19  Mujer       Sin      2    Sur     No
+##   horas.sueno tipo.biol diop t.sangre
+## 1          12     Campo 3.75       O+
+## 2           6       Lab 0.00       O+
+## 3           6     Campo 0.00       A+
+## 4           5       Lab 2.00      AB-
+## 5           7     Campo 0.50       O+
+## 6           6       Lab 4.00       O+</code></pre>
+<pre class="r"><code>colnames(datosEstBio)</code></pre>
+<pre><code>##  [1] &quot;alumnx&quot;      &quot;prom&quot;        &quot;estatura&quot;    &quot;peso&quot;        &quot;edad&quot;       
+##  [6] &quot;sexo&quot;        &quot;edo.civil&quot;   &quot;n.herm&quot;      &quot;p.ciud&quot;      &quot;becado&quot;     
+## [11] &quot;horas.sueno&quot; &quot;tipo.biol&quot;   &quot;diop&quot;        &quot;t.sangre&quot;</code></pre>
+</div>
+<div id="paletas-de-colores" class="section level2">
+<h2><strong>Paletas de colores</strong></h2>
+<p>Antes de comenzar quiero mostrar algunos recursos para generar
+paletas de color. La primer forma consiste en definir los colores
+manualmente en un vector:</p>
+<pre class="r"><code>pal1 &lt;- c(&quot;blue&quot;, &quot;green&quot;, &quot;orange&quot;)</code></pre>
+<p>La segunda forma se puede hacer al usar la función
+<code>colorRampPalette()</code> y definiendo cada color. El resultado
+será una función que cree un gradiente por los colores definidos a la
+cual le especificaremos el número de colores que debe generar.</p>
+<pre class="r"><code># Crear una paleta de colores personalizada
+mi_paleta &lt;- colorRampPalette(c(&quot;blue&quot;, &quot;green&quot;, &quot;orange&quot;))
+mi_paleta(5) #5 colores</code></pre>
+<pre><code>## [1] &quot;#0000FF&quot; &quot;#007F7F&quot; &quot;#00FF00&quot; &quot;#7FD200&quot; &quot;#FFA500&quot;</code></pre>
+<p>Existen diferentes colores en R. La Universidad de Columbia tiene una
+lista de colores que te pueden ayudar a elegir para los dos métodos
+anteriores. <a
+href="http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf">Aquí
+disponible</a></p>
+<p>El último método que veremos será generar paletas con esta página. <a
+href="https://r-charts.com/es/paletas-colores/#continuas"><strong>R
+CHARTS</strong></a>. La cual permite cargar la paleta de colores que nos
+guste usando paquetes de R. Por ejemplo, si nos gusta la paleta de
+colores “paletteer_d(”colorBlindness::Blue2Orange10Steps”)“:</p>
+<pre class="r"><code># Cargamos paquetes con paletas de colores
+library(paletteer)
+library(colorBlindness)
+## Obtener la paleta &quot;Blue2Orange10Steps&quot;
+p1 &lt;- paletteer_d(&quot;colorBlindness::Blue2Orange10Steps&quot;, 4)### El número como argumento indica cuántos colores queremos de esa paleta. Nota: tiene un máximo.
+palVerde &lt;- paletteer_d(&quot;ggsci::green_material&quot;) </code></pre>
+<div style="text-align:center">
+<p><img src="imagenes/ejemploPaleta.png" style="width:60.0%" /></p>
+</div>
+</div>
+<div id="gráfico-de-puntos" class="section level2">
+<h2><strong>Gráfico de puntos</strong></h2>
+<p>Para generarlo podemos usar la función <code>plot()</code> indicando
+los datos del eje <em>X</em> y del <em>Y</em>. En este caso haremos un
+gráfico de dispersión de la altura contra el peso:</p>
+<pre class="r"><code> plot(x = datosEstBio$estatura, y = datosEstBio$peso)</code></pre>
+<p><img src="U6_GraficosR_files/figure-html/unnamed-chunk-5-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Existe una gran cantidad de parámetros para personalizar nuestro
+gráfico. Aquí algunos de ellos:</p>
+<pre class="r"><code>par(mfrow= c(1,2)) 
+
+plot(x = datosEstBio$estatura, y = datosEstBio$peso,
+      main = &quot;Estatura vs Peso&quot;, cex.main = 1.4,#Título
+     xlab = &quot;Estatura(cm)&quot;, ylab = &quot;Peso(Kg)&quot;, #Título de los ejes
+    xlim = c(1.40, 1.9), ylim = c(0,120), # Máx y min del eje X y Y
+    pch = 21, cex = 0.8,# Tipo y tamaño de puntos
+    bg = &quot;orange2&quot;, col = &quot;gray85&quot;, #Color puntos
+    bty = &quot;L&quot; # Gráfico sin márgenes superior y derecho
+    ) 
+
+# Además es posible agregar una línea de tendencia con abline() y cambiar color por categoría
+## Color por categoría
+ 
+plot(x = datosEstBio$estatura, y = datosEstBio$peso,
+      main = &quot;Estatura vs Peso&quot;, cex.main = 1.4,
+     xlab = &quot;Estatura(cm)&quot;, ylab = &quot;Peso(Kg)&quot;, 
+    xlim = c(1.40, 1.9), ylim = c(0,120), 
+    pch = 21, 
+    col = factor(datosEstBio$sexo) ### Color por categoría
+    ) +
+## Añadir la línea de tendencia
+abline(lm(datosEstBio$peso ~ datosEstBio$estatura),
+       lwd = 1.5, # Tamaño de línea
+       col = &quot;darkblue&quot; #Color de línea
+       ) </code></pre>
+<p><img src="U6_GraficosR_files/figure-html/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;" /></p>
+</div>
+<div id="gráfico-de-líneas" class="section level2">
+<h2><strong>Gráfico de líneas</strong></h2>
+<p>Se genera de forma similar. Para este ejemplo mostraremos con otro
+gráfico.</p>
+<pre class="r"><code>par(mfrow=c(1,3)) #Este argumento nos ayuda a poner un lienzo con varios gráficos.  1 Fila y 3 columnas.
+
+#Gráfico de puntos 
+plot(x = datosEstBio$estatura, y = datosEstBio$peso,
+     xlab = &quot;Estatura(Cm)&quot;, ylab = &quot;Peso(Kg)&quot;,
+     main = &quot;Estatura vs Peso&quot;, cex.main = 1.4,
+     xlim = c(1.40, 1.9), ylim = c(0,120),
+     pch = 21, 
+     bg = &quot;orange2&quot;, col = &quot;orange3&quot;
+     )
+
+# Gráfico de líneas Parámetro type = &quot;l&quot;
+plot(x = sort(datosEstBio$estatura[c(11:20)]), y = datosEstBio$peso[c(11:20)], 
+     type = &quot;l&quot; ,
+     xlab = &quot;Estatura(Cm)&quot;, ylab = &quot;Peso(Kg)&quot;,
+     main = &quot;Líneas: Estatura vs Peso&quot;, cex.main = 1.4,
+     col = &quot;darkblue&quot;
+    )
+
+# Gráfico de líneas y puntos. Parámetro type = &quot;o&quot;
+plot(x = sort(datosEstBio$estatura[c(11:20)]), y = sort(datosEstBio$peso[c(11:20)]), 
+     type = &quot;o&quot; , pch = 21,
+     xlab = &quot;Estatura(Cm)&quot;, ylab = &quot;Peso(Kg)&quot;,
+     main = &quot;Líneas+puntos: Estatura vs Peso&quot;, cex.main = 1.2,
+     bg = &quot;orange2&quot;,col = &quot;orange4&quot;
+    )</code></pre>
+<p><img src="U6_GraficosR_files/figure-html/unnamed-chunk-8-1.png" width="864" style="display: block; margin: auto;" /></p>
+</div>
+<div id="añadiendo-elementos-a-los-gráficos" class="section level2">
+<h2><strong>Añadiendo elementos a los gráficos</strong></h2>
+<p>Antes de continuar debemos conocer que así como dentro de cada
+función del plot existen parámetros, también podemos agregar elementos
+sobre nuestro gráfico creado. Algunos elementos son:</p>
+<ul>
+<li>Textos</li>
+<li>Leyendas</li>
+<li>Puntos</li>
+<li>Líneas</li>
+<li>Polígonos</li>
+</ul>
+<div id="textos" class="section level3">
+<h3>Textos</h3>
+<p>Se realizan con la función <code>text()</code></p>
+<pre class="r"><code># Elementos en los gráficos 
+## Creamos plot
+plot(x = datosEstBio$estatura, y = datosEstBio$peso,
+     xlab = &quot;Estatura(cm)&quot;, ylab = &quot;Peso(Kg)&quot;,
+     main = &quot;Añadiendo elementos&quot;,
+     col = factor(datosEstBio$sexo),
+     bg = factor(datosEstBio$sexo),
+     pch = 21)</code></pre>
+<pre class="r"><code>## Añadimos texto
+
+ text(x = 1.5, y = 80,    # Posición
+      label = &quot;Hola:)&quot;,   # Texto
+      col = &quot;darkblue&quot;,   # Color
+      cex = 0.9) </code></pre>
+</div>
+<div id="leyendas" class="section level3">
+<h3>Leyendas</h3>
+<p>Se realizan con la función <code>legend()</code></p>
+<pre class="r"><code>## Añadimos una leyenda  
+ legend(&quot;topleft&quot;,   #Posición
+        inset = 0.05, # Margen
+        title = &quot;Simbología&quot;, #Título
+        legend = c(&quot;H&quot;, &quot;M&quot;),
+        cex = 0.8,#Simbología
+        col = factor(datosEstBio$sexo),
+        pch = 21,
+        box.col = &quot;gray80&quot;, # Color del recuadro
+        horiz = T)</code></pre>
+</div>
+<div id="puntos" class="section level3">
+<h3>Puntos</h3>
+<p>Se realizan con la función <code>points()</code></p>
+<pre class="r"><code>## Añadimos puntos
+ points(estaturaSangreA, pesoSangreA,
+        pch = 17,
+        cex = 1.3,
+        col = &quot;blue3&quot;)
+  ### Agregamos su leyenda
+ legend(&quot;topright&quot;,   #Posición
+        inset = 0.05, # Margen
+        legend = c(&quot;A+&quot;),
+        cex = 0.8,#Simbología
+        col = &quot;blue&quot;,
+        pch = 15,
+        box.col = &quot;gray80&quot;, # Color del recuadro
+        horiz = T)# Orientación</code></pre>
+</div>
+<div id="líneas" class="section level3">
+<h3>Líneas</h3>
+<p>Se realizan con la función <code>abline()</code> o
+<code>arrows()</code></p>
+<pre class="r"><code>## Añadimos líneas
+### Líneas continuas
+ abline(lm(datosEstBio$peso ~ datosEstBio$estatura),
+        lwd = 2, # Tamaño de línea
+        col = &quot;orange&quot; #Color de línea
+        )
+### flechas  o barras de error  
+ arrows( x0 = datosEstBio$estatura[1:10], # Inicio de línea en X
+         x1 = datosEstBio$estatura[1:10], #Final de línea
+         y0 = datosEstBio$peso[1:10]-2, # Inicio en Y
+         y1 = datosEstBio$peso[1:10]+2, # Final en Y
+         code = 3, # Tipo de línea (1 = arrow)
+         angle = 90, # Ángulo
+         col = &quot;black&quot;,
+         lwd = 2)</code></pre>
+</div>
+<div id="polígonos" class="section level3">
+<h3>Polígonos</h3>
+<p>Se realizan con la función <code>polygon()</code></p>
+<pre class="r"><code>## Polígonos  
+ polygon(datosEstBio$estatura[100:103], # Coordenadas X
+         datosEstBio$peso[100:103], # Coordenadas Y
+         col=rgb(0, 0, 1, 0.1) #Color definido en RGB
+         )</code></pre>
+<div style="text-align:center">
+<p><img src="imagenes/elementosGrafico.png" style="width:90.0%" /></p>
+</div>
+</div>
+</div>
+<div id="gráfico-de-barras" class="section level2">
+<h2><strong>Gráfico de barras</strong></h2>
+<p>Para hacer un gráfico de barras usamos la función
+<code>barplot()</code>. Además, necesitaremos variables categóricas con
+frecuencia. En este caso, averiguaremos la cantidad de hombres y mujeres
+en el curso hipotético de Bio.</p>
+<pre class="r"><code># Usamos la función barplot()
+## Podemos usar parámetros similares a la función plot()
+###Guardamos colores deseados
+ colores &lt;- c(&quot;#BA68C8&quot;, &quot;#5E35B1&quot; ) 
+### Realizamos un table() para conocer el num. de estudiantes por sexo.
+frecSexo &lt;- table(datosEstBio$sexo)
+
+# Gráfico de barras barplot()
+barplot(frecSexo, # Datos con conteo
+        main = &quot;Número de H y M en el curso&quot;,
+        xlab=&quot;Sexo&quot;, # Tíulo del eje X
+        ylab=&quot;Frecuencia&quot;, # Título del eje Y
+        border = colores, col = colores) # Colores</code></pre>
+<p><img src="U6_GraficosR_files/figure-html/unnamed-chunk-15-1.png" width="336" style="display: block; margin: auto;" /></p>
+<div id="gráfico-de-barras-con-subcategorías" class="section level3">
+<h3>Gráfico de barras con subcategorías</h3>
+<p>En este caso averiguaremos cuántos hombres y mujeres hay en el grupo
+y de qué partes de la ciudad son. Para ello necesitamos las dos
+variables en una tabla de contingencia y lo podemos lograr de la
+siguiente manera:</p>
+<pre class="r"><code>(sexoXParteDeLaCiudad &lt;- table(datosEstBio$p.ciud, datosEstBio$sexo))</code></pre>
+<pre><code>##        
+##         Hombre Mujer
+##   Este      11    12
+##   Norte      9    22
+##   Oeste      2     9
+##   Sur       20    40</code></pre>
+<p>Ahora podemos construir nuestro gráfico:</p>
+<pre class="r"><code># Gráfico de barras
+barplotBar &lt;- barplot(sexoXParteDeLaCiudad,
+        beside=TRUE, # Este argumento indica si debe poner las barras apiladas o una a lado de otra
+        xlab=&quot;Sexo&quot;, # Tíulo del eje X
+        ylab=&quot;Frecuencia&quot;,
+        ylim= c(0,50),
+        names.arg = c(&quot;Hombres&quot;, &quot;Mujeres&quot;), # Nombre de cad grupo
+        main = &quot;Mujeres y Hombres por parte de la Ciudad&quot;,
+        col = p1, border = p1)
+### Agregamos su leyenda
+    legend(&quot;topleft&quot;,   #Posición
+           inset = 0.05, # Margen
+           title = &quot;CDMX&quot;,
+           legend = rownames(sexoXParteDeLaCiudad),#Simbología
+           cex = 0.8,
+           title.cex = 0.7, #Tamaño del título
+           text.width = 0.3, # Ancho del texto
+           col = p1,
+           pch = 15, 
+           adj = c(0.5,0.5), # Justificado de la leyenda
+           xjust = 0, yjust = 0,# Justificado del texto
+           box.col = &quot;gray90&quot; # Color del recuadro
+    ) 
+  #Etiquetas del conteo
+    text(x = as.vector(barplotBar), y = sexoXParteDeLaCiudad+2,
+         label = sexoXParteDeLaCiudad, cex = 0.9)</code></pre>
+<div style="text-align:center">
+<p><img src="imagenes/barplotCDMXHM.png" style="width:80.0%" /></p>
+</div>
+</div>
+<div id="gráfico-de-barras-apilado" class="section level3">
+<h3>Gráfico de barras apilado</h3>
+<p><strong>Para generar un gráfico de barras apiladas cambiamos la
+opción a </strong> <code>besides = FALSE</code></p>
+<pre class="r"><code>barplot(sexoXParteDeLaCiudad,
+        beside=F, xlab=&quot;Sexo&quot;, # Tíulo del eje X
+        ylab=&quot;Frecuencia&quot;, 
+        main = &quot;Mujeres y Hombres por parte de la Ciudad &quot;,
+        col = p1, border = &quot;gray90&quot;
+        )
+legend(&quot;topleft&quot;,   #Posición
+        inset = 0.05, # Margen
+        title = &quot;CDMX&quot;,
+        legend = rownames(sexoXParteDeLaCiudad),
+        cex = 0.8,#Simbología
+        col = p1,
+        pch = 15,
+        box.col = &quot;gray90&quot; # Color del recuadro
+        )# Orientación</code></pre>
+<p><img src="U6_GraficosR_files/figure-html/unnamed-chunk-18-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="gráfico-de-barras-con-barras-de-desv.-estándar"
+class="section level3">
+<h3>Gráfico de barras con barras de desv. estándar</h3>
+<p>Para esto usaremos la función <code>arrows()</code> la cual agregará
+elementos a nuestro gráfico.</p>
+<p>En este caso graficaremos el promedio de la estatura de las personas
+según la parte de la ciudad que son.</p>
+<p>Para ello primero calculamos la media según la parte de la ciudad con
+una expresión muy útil.</p>
+<pre class="r"><code>promEstNorte &lt;- mean(datosEstBio$estatura[datosEstBio$p.ciud == &quot;Norte&quot;])
+promEstSur &lt;- mean(datosEstBio$estatura[datosEstBio$p.ciud == &quot;Sur&quot;])
+promEstEste &lt;- mean(datosEstBio$estatura[datosEstBio$p.ciud == &quot;Este&quot;])
+promEstOeste &lt;- mean(datosEstBio$estatura[datosEstBio$p.ciud == &quot;Oeste&quot;])
+
+#Ahora crearemos un data frame para almacenar la info
+estaturaXPCiudad &lt;- data.frame( &quot;Promedio&quot; = c(promEstNorte,promEstSur,
+                                 promEstEste, promEstOeste),
+                                &quot;p.ciudad&quot; = c(&quot;Norte&quot;, &quot;Sur&quot;, &quot;Este&quot;, &quot;Oeste&quot;)
+                                )</code></pre>
+<p>Ahora debemos calcular la desviación estándar con la función
+<code>sd()</code> de la misma forma que con los promedios de la estatura
+por parte de la ciudad. También podemos usar un ciclo <code>for</code>
+para que realice esta operación por nosotrxs.</p>
+<p>Ahora con los promedios y la sd podemos construir nuestro
+gráfico.</p>
+<pre class="r"><code># Creamos nuestro gráfico de barras
+# Crearemos una nueva paleta de color
+library(paletteer)
+pal2 &lt;- paletteer_d(&quot;ggsci::purple_material&quot;)
+
+barplot(PromXCDMX$promedio,
+        name=PromXCDMX$p.ciud,
+        xlab = &quot;Estudiantes x parte de la CDMX&quot;,
+        ylab = &quot;Promedio de la estatura (cm)&quot;,
+        ylim = c(0,2),
+        width= 0.4,
+        col = p1, border = F
+        ) +
+arrows( x0= c(0.28, 0.76, 1.23, 1.72),
+         y0=PromXCDMX$promedio - PromXCDMX$sd, 
+         y1=PromXCDMX$promedio + PromXCDMX$sd, 
+        code=3, angle=90,
+        col = &quot;#6A1B9A&quot;,
+        length=0.12, lwd = 1.5)</code></pre>
+<p><img src="U6_GraficosR_files/figure-html/unnamed-chunk-21-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>## numeric(0)</code></pre>
+</div>
+</div>
+<div id="boxplot" class="section level2">
+<h2><strong>Boxplot</strong></h2>
+<p>Para hacer un gráfico boxplot (caja y bigotes) usamos la función
+<code>boxplot()</code>. Este tipo de gráficos nos ayuda a ver la
+distribución de nuestros datos ya que nos brinda datos de los cuartiles
+(1o, 2o y 3er) así como del máximo y el mínimo.<br />
+Para este ejemplo compararemos el promedio de los estudiantes</p>
+<pre class="r"><code>par(mfrow = c(1,2))
+
+# Boxplot vertical
+boxplot(datosEstBio$prom~datosEstBio$becado,
+        main = &quot;Promedio alumnos con/sin beca&quot;,
+        xlab = &quot;Becadxs&quot;, ylab = &quot;Promedios académicos&quot;,
+        col = c(&quot;#C8E6C9&quot;, &quot;#81C784&quot;))
+
+# Boxplot horizontal (derecha) más parámetros
+boxplot(datosEstBio$prom~datosEstBio$becado,
+        main = &quot;Promedio alumnos con/sin beca&quot;,
+        xlab = &quot;Becadxs&quot;, ylab = &quot;Promedios académicos&quot;,
+        horizontal = T,   # Parámetro para ser horizontal
+        col = c(&quot;#C8E6C9&quot;, &quot;#81C784&quot;),
+        outpch = 22,     # Tipo de los Outliers
+        outbg = &quot;green3&quot;,# Color de los Outliers 
+        whiskcol = &quot;green4&quot;, # Color de los bigotes
+        whisklty = 1, # Tamaño de los bigotes
+        lty = 1, lwd = 2 # Tipo de línea y grosor
+        ) </code></pre>
+<p><img src="U6_GraficosR_files/figure-html/unnamed-chunk-22-1.png" width="864" style="display: block; margin: auto;" /></p>
+</div>
+<div id="histogramas" class="section level2">
+<h2><strong>Histogramas</strong></h2>
+<p>Los histogramas son gráficos que nos permite ver la frecuancia y
+distribución de nuestros datos agrupados en clases. Para generarlo
+usamos la función <code>hist()</code>. Por defecto se muestran las
+frecuencias absolutas en clases delimitadas por la regla de Sturges,
+pero se puede seleccionar ver las frecuencias relativas. Para el ejemplo
+usaremos el peso como variable para graficar.</p>
+<div id="frecuencia-absoluta" class="section level3">
+<h3>Frecuencia absoluta</h3>
+<pre class="r"><code># Seleccionamos el peso
+hist_freqA &lt;- hist(datosEstBio$peso,
+     main = &quot;Frecuencia absoluta del peso&quot;,
+     xlab = &quot;Peso (kg)&quot;,
+     ylab = &quot;Frecuencia absoluta&quot;,
+     ylim = c(0,50),
+     col = palVerde, border = palVerde,
+     ) 
+text(hist_freqA$mids,hist_freqA$counts,
+   labels=hist_freqA$counts, adj=c(0.5, -0.5))</code></pre>
+<p><img src="U6_GraficosR_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<div style="text-align:center">
+<p><img src="../imagenes/hist_freqA.png" style="width:70.0%" /></p>
+</div>
+</div>
+<div id="frecuencia-relativa" class="section level3">
+<h3>Frecuencia relativa</h3>
+<p>Para generar el gráfico de frecuencia relativa:</p>
+<pre class="r"><code># Gráfico de frecuencia relativa
+hist_freqR &lt;- hist(datosEstBio$peso)</code></pre>
+<pre class="r"><code>hist_freqR$counts &lt;- hist_freqR$counts/length(datosEstBio$peso)</code></pre>
+<pre class="r"><code>plot(hist_freqR, main = &quot;Frecuencia relativa del peso&quot;,
+     xlab = &quot;Peso (kg)&quot;,
+     ylab = &quot;Frecuencia relativa del peso&quot;,
+     col = palVerde) +
+text(hist_freqR$mids,hist_freqR$counts,
+     labels=hist_freqA$counts, adj=c(0.5, -0.5))</code></pre>
+<pre><code>## integer(0)</code></pre>
+<div style="text-align:center">
+<p><img src="imagenes/hist_freqR.png" style="width:70.0%" /></p>
+</div>
+</div>
+<div id="frecuencia-acumulada" class="section level3">
+<h3>Frecuencia acumulada</h3>
+<p>Para generar el gráfico de frecuencia relativa acumulada usaremos la
+función <code>cumsum()</code> que devuelve la suma acumulada del número
+más el número anterior a éste.</p>
+<pre class="r"><code># Creamos el histograma
+hist_freqRA &lt;- hist(datosEstBio$peso)</code></pre>
+<pre class="r"><code># Usamos la función cumsum para que nos dé la frec. relativa acumulada
+hist_freqRA$counts &lt;- cumsum(hist_freqRA$counts/length(datosEstBio$peso))</code></pre>
+<pre class="r"><code># Generamos el gráfico
+plot(hist_freqRA, main = &quot;Frecuencia relativa acumulada del peso&quot;,
+     xlab = &quot;Peso (kg)&quot;,
+     ylab = &quot;Frecuencia relativa acumulada del peso&quot;,
+     col = palVerde) +
+text(hist_freqRA$mids,hist_freqRA$counts,
+     labels=hist_freqRA$counts, adj=c(0.5, -0.5),
+     cex = 0.6)</code></pre>
+<p><img src="U6_GraficosR_files/figure-html/unnamed-chunk-27-1.png" width="432" style="display: block; margin: auto;" /></p>
+<footer>
+<p style="text-align: center; class="Copyright"> &copy Copyright Cursos Lic. Rubén Muñoz 2024</p>
+<p class="Copyright" style="text-align: center;">
+<em><a href="mailto:mrubenClasesR@gmail.com"
+class="email">mrubenClasesR@gmail.com</a></em>
+</p>
+</footer>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

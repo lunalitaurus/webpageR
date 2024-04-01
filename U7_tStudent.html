@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Rubén Muñoz" />
+
+<meta name="date" content="2024-01-24" />
+
+<title>Unidad 7.1: t de Student</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Temario.html">Contenido</a>
+</li>
+<li>
+  <a href="Instalacion.html">U1</a>
+</li>
+<li>
+  <a href="U2_Conceptos_básicos.html">U2</a>
+</li>
+<li>
+  <a href="U3_Estructuras_de_datos.html">U3</a>
+</li>
+<li>
+  <a href="U4_ImportarExportarDatos.html">U4</a>
+</li>
+<li>
+  <a href="U5.1_CondicionesBucles.html">U5</a>
+</li>
+<li>
+  <a href="U6_GraficosR.html">U6</a>
+</li>
+<li>
+  <a href="U7_tStudent.html">U7</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown-header">Rubén Muñoz</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Unidad 7.1: t de Student</h1>
+<h4 class="author">Rubén Muñoz</h4>
+<h4 class="date">2024-01-24</h4>
+
+</div>
+
+
+<div id="temario" class="section level2">
+<h2>Temario</h2>
+<ul>
+<li>
+<a href="U7_tStudent.html"> Unidad 7.1: t de Student</a>
+</li>
+<li>
+<a href="Unidad_7.2_ANOVA.html">Unidad 7.2: ANOVA</a>
+</li>
+<li>
+<a href="Unidad_7.3_Correlation.html">Unidad 7.3: Pruebas de correlación
+y Correlogramas</a>
+</li>
+</ul>
+</div>
+<div id="bievenida" class="section level2">
+<h2><strong>Bievenida</strong></h2>
+<p>En esta lección aprederemos acerca de las pruebas estadísticas de t
+de Student:) Este tipo de pruebas nos permite comparar si existen
+diferencias significativas entre dos o más medias muestrales (t de
+Student y ANOVA, respectivamente).</p>
+<p>Este curso <strong>no</strong> es acerca de estadística por lo cual
+no se revisarán los aspectos teóricos sino más bien los elementos
+prácticos de las pruebas estadísticas. Se ha planteado mostrar las
+herramientas en R que nos permiten hacer estas pruebas las cuales
+usualmente son utilizadas aún por algunas licenciaturas en la UNAM.</p>
+<div style="text-align:center">
+<div class="float">
+<img src="imagenes/kitty_in_R.jpg" style="width:45.0%"
+alt="Cute Kitty using R" />
+<div class="figcaption">Cute Kitty using R</div>
+</div>
+</div>
+</div>
+<div id="aspectos-relevantes-a-considerar" class="section level2">
+<h2><strong>Aspectos relevantes a considerar</strong></h2>
+<p>Antes de comenzar primero debemos recordar que las pruebas
+estadísticas que veremos se basan en el contraste de pruebas de
+hipótesis. De forma muy simplificada, tenemos una <em>Hipótesis
+nula</em> que indica que no existen diferencias entre nuestras muestras
+y una <em>Hipótesis alternativa</em> que establece que sí las hay
+(ejemplo: que no sean iguales, que una sea mayor a la otra o una sea
+menor). Segundo, cualquiera que sean nuestro conjunto de datos, éstos
+siguen un tipo de distribución de probabilidad. En el caso de la t de
+Student (prueba de t) y ANOVA se asume que siguen una distribución
+normal (de campana). Para realizar nuestras pruebas tendremos que
+definir nuestro juego de hipótesis.</p>
+<p>Un ejemplo en el cual definimos nuestras hipótesis: Se quiere conocer
+si el diámetro promedio de los árboles de <em>Ceiba pentandra</em> en el
+bosque tropical del sur de México difiere del promedio mundial de la
+especie. Si conocemos el diámetro promedio de mi población en el sur de
+México y del promedio mundial entonces establecemos lo siguiente.</p>
+<p>H0: <span class="math inline">\(\bar{x}= \mu\)</span> (El diámetro
+promedio no cambia (es igual del promedio mundial)</p>
+<p>Ha: <span class="math inline">\(\bar{x} \neq \mu\)</span> (El
+diámetro promedio es diferente del promedio mundial)</p>
+<p>Una vez declaradas nuestras hipótesis nos fijaremos en dos valores
+importantes:</p>
+<ul>
+<li>El estadístico de prueba.</li>
+<li>El valor de <em>p</em> (significancia estadística).</li>
+</ul>
+</div>
+<div id="t-de-student" class="section level2">
+<h2><strong>t de Student</strong></h2>
+<p>La prueba de t de Student se utiliza para comparar las medias de dos
+muestras. Esta prueba supone normalidad en los datos y existen varios
+tipos de pruebas.</p>
+<table>
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Prueba de t</th>
+<th>Objetivo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>De una muestra</td>
+<td>Determinar si la media de la población es igual o no que un valor
+específico</td>
+</tr>
+<tr class="even">
+<td>De dos muestras independientes</td>
+<td>Determinar si las medias de la población tienen diferencias
+significativas (diferentes, “&gt;” o “&lt;”)</td>
+</tr>
+<tr class="odd">
+<td>De muestras dependientes</td>
+<td>Determinar si la media de la población es igual o diferente después
+de un tiempo <span class="math inline">\(\mu1 \neq \mu2\)</span></td>
+</tr>
+</tbody>
+</table>
+<div id="datos-a-usar" class="section level4">
+<h4>Datos a usar</h4>
+<p>Para la práctica usaremos los datos de <a
+href="https://www.gapminder.org/about/about-gapminder/"><em>Gapminder</em></a>
+la cual es una organización que se dedica a desafiar percepciones
+erróneas sobre el desarrollo global y utiliza datos para proporcionar
+una comprensión más precisa de las tendencias mundiales.Por lo que
+permite el acceso a datos e información estadística a nivel global. En R
+está disponible como la librería <code>gapminder</code>.</p>
+<pre class="r"><code># Instalar el paquete si no está instalado
+if (!requireNamespace(&quot;gapminder&quot;, quietly = TRUE)) {
+  install.packages(&quot;gapminder&quot;)
+}</code></pre>
+<pre class="r"><code># Cargar el paquete
+library(&quot;gapminder&quot;)
+
+# Cargar los datos de Gapminder
+gapm &lt;- gapminder
+summary(gapm)</code></pre>
+<pre><code>##         country        continent        year         lifeExp     
+##  Afghanistan:  12   Africa  :624   Min.   :1952   Min.   :23.60  
+##  Albania    :  12   Americas:300   1st Qu.:1966   1st Qu.:48.20  
+##  Algeria    :  12   Asia    :396   Median :1980   Median :60.71  
+##  Angola     :  12   Europe  :360   Mean   :1980   Mean   :59.47  
+##  Argentina  :  12   Oceania : 24   3rd Qu.:1993   3rd Qu.:70.85  
+##  Australia  :  12                  Max.   :2007   Max.   :82.60  
+##  (Other)    :1632                                                
+##       pop              gdpPercap       
+##  Min.   :6.001e+04   Min.   :   241.2  
+##  1st Qu.:2.794e+06   1st Qu.:  1202.1  
+##  Median :7.024e+06   Median :  3531.8  
+##  Mean   :2.960e+07   Mean   :  7215.3  
+##  3rd Qu.:1.959e+07   3rd Qu.:  9325.5  
+##  Max.   :1.319e+09   Max.   :113523.1  
+## </code></pre>
+</div>
+<div id="prueba-de-t-de-una-muestra" class="section level3">
+<h3>Prueba de t de una muestra</h3>
+<p>Estamos en el 2007 y estamos realizando un estudio para conocer la
+esperanza de vida de la población de América Una vez que muestreamos
+arduamente queremos conocer si la esperanza de vida promedio de lxs
+asiáticos es igual a la de la población mundial. En ese momento la
+esperanza de vida mundial promedio era de 70 años, según datos del <a
+href="https://www.bancomundial.org/es/home">Banco Mundial</a>.
+Declaramos nuestras hipótesis:</p>
+<p>HO : La esperanza de vida de lxs americanxs es igual al promedio
+mundial. Ha: La esperanza de vida de lxs americanxs es diferente del
+promedio mundial.</p>
+<pre class="r"><code># Seleccionamos los datos de América
+ amLifeExp &lt;- gapm$lifeExp[gapm$continent == &quot;Americas&quot; &amp; gapm$year == 2007]</code></pre>
+</div>
+<div id="verificación-de-supuestos" class="section level3">
+<h3>Verificación de supuestos</h3>
+<p>Esta prueba asume normalidad de los datos, por lo que usamos la
+función <code>shapiro.test()</code> y nos fijamos que el valor de
+<em>p</em> sea mayor a 0.05, ya que esta prueba asume como hipótesis
+nula (HO) que los datos se distribuyen de manera normal.</p>
+<pre class="r"><code>(amNorm &lt;- shapiro.test(amLifeExp))</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  amLifeExp
+## W = 0.93431, p-value = 0.1093</code></pre>
+<p>Una forma visual de tratar de saber si nuestros datos cumplen el
+supuesto de normalidad es un histograma y un gráfico de densidad.</p>
+<pre class="r"><code> hist(amLifeExp,
+      freq = F, # Al colocar False se dibuja con las densidades de probabilidad
+      col = &quot;cornflowerblue&quot;, border = F)+
+lines(density(amLifeExp), col = &quot;navy&quot;)</code></pre>
+<div style="text-align:center">
+<p><img src="imagenes/hist_azul.png" style="width:80.0%" /></p>
+</div>
+<div id="prueba-de-t-de-una-muestra-1" class="section level4">
+<h4>Prueba de t de una muestra</h4>
+<p>Para realizarla usamos la función <code>t.test()</code>, en este caso
+debemos especificar la media con la que queremos comparar (70 años).</p>
+<pre class="r"><code>(amt.test1group &lt;- t.test(amLifeExp, 
+       mu = 70,  # Valor de comparación
+       alternative = &quot;two.sided&quot; # Tipo de Ha
+       ))</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  amLifeExp
+## t = 4.0623, df = 24, p-value = 0.0004501
+## alternative hypothesis: true mean is not equal to 70
+## 95 percent confidence interval:
+##  71.77499 75.44125
+## sample estimates:
+## mean of x 
+##  73.60812</code></pre>
+<p>Para calcular el estadítico t usamos la siguiente función:</p>
+<pre class="r"><code># t.teorico. Prueba de dos colas 
+qt(p = 0.025, # Probabilidad
+   df = length(amLifeExp)-1,# grados de libertad: tamaño de la muestra menos 1
+   )</code></pre>
+<pre><code>## [1] -2.063899</code></pre>
+<pre class="r"><code>qt(p = 0.975, # Probabilidad
+   df = length(amLifeExp)-1) # grados de libertad</code></pre>
+<pre><code>## [1] 2.063899</code></pre>
+<p>Si el estadístico observado (t) es diferente del t.teórico y el valor
+de <em>p</em> es menor a 0.05 quiere decir que la prueba es
+significativa y podemos rechazar la HO, es decir, la esperanza de vida
+de lxs americanxs es diferente del promedio mundial.</p>
+</div>
+</div>
+<div id="prueba-de-t-de-dos-muestras-independientes"
+class="section level3">
+<h3>Prueba de t de dos muestras independientes</h3>
+<p>Somos botánicxs y después de nuestro trabajo de campo recopilamos
+datos de <em>Iris spp.</em>. Nosotrxs queremos saber si la longitud de
+los pétalos de la especie <em>Iris setosa</em> son en promedio de mayor
+tamaño que las de <em>I. versicolor</em>. Por lo tanto Declaramos
+nuestras hipótesis:</p>
+<p>HO : La longitud de los pétalos de la especie <em>Iris setosa</em> NO
+son en promedio más grandes que las de <em>I. versicolor</em>. Ha: La
+longitud de los pétalos de <em>Iris setosa</em> SON en promedio mayores
+que las de <em>I. versicolor</em>.</p>
+<pre class="r"><code># Preparamos los datos 
+head(iris)</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
+<pre class="r"><code>setosaPetalL &lt;- iris$Petal.Length[iris$Species ==&quot;setosa&quot;]
+versicolorPetalL &lt;- iris$Petal.Length[iris$Species ==&quot;versicolor&quot;]</code></pre>
+</div>
+<div id="verificación-de-supuestos-1" class="section level3">
+<h3>Verificación de supuestos</h3>
+<p>Esta prueba asume normalidad de los datos, por lo que usamos la
+función <code>shapiro.test()</code> y nos fijamos que el valor de
+<em>p</em> sea mayor a 0.01, ya que esta prueba asume como hipótesis
+nula (HO) que los datos se distribuyen de manera normal.</p>
+<pre class="r"><code>(setosaNorm &lt;- shapiro.test(setosaPetalL))</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  setosaPetalL
+## W = 0.95498, p-value = 0.05481</code></pre>
+<pre class="r"><code>(versicolorNorm &lt;- shapiro.test(versicolorPetalL))</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  versicolorPetalL
+## W = 0.966, p-value = 0.1585</code></pre>
+<p>Para ver su distribución:</p>
+<pre class="r"><code>hist(setosaPetalL, freq = F,
+     main = &quot; &quot;, xlab = &quot;Largo de los pétalos&quot;,
+     col = &quot;plum3&quot;, border = &quot;plum4&quot;,
+     xlim = c(1,6))+
+hist(versicolorPetalL, 
+     add = T, # El argumento add nos pemrite superponerlos
+     freq = F, col = &quot;lightpink1&quot;,
+     border = &quot;lightpink3&quot;)
+  lines(density(setosaPetalL), col = &quot;plum4&quot;)
+  lines(density(versicolorPetalL), col = &quot;lightpink4&quot;)</code></pre>
+<div style="text-align:center">
+<p><img src="imagenes/hist_setosa_versicolor.png"
+style="width:90.0%" /></p>
+</div>
+<p>También podemos compararlas visualmente con on boxplot:</p>
+<pre class="r"><code>boxplot(setosaPetalL, versicolorPetalL,
+        ylab = &quot;Especies&quot;,
+        xlab= &quot;Longitud de pétalos&quot;,
+        col = c(&quot;plum2&quot;, &quot;lightpink2&quot;),
+        border = c(&quot;plum4&quot;, &quot;lightpink4&quot;),
+        outpch = 22,
+        horizontal = T,
+        names = c(&quot;Setosa&quot;, &quot;Versicolor&quot;))</code></pre>
+<p><img src="U7_tStudent_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Además esta prueba asume igualdad de varianzas por lo que usamos la
+función <code>leveneTest()</code>. Si el valor de p &gt; 0.05 podemos
+considerar igualdad de varianzas.</p>
+<pre class="r"><code>library(car)</code></pre>
+<pre><code>## Loading required package: carData</code></pre>
+<pre class="r"><code>leveneTest(setosaPetalL, 
+         versicolorPetalL)</code></pre>
+<pre><code>## Warning in leveneTest.default(setosaPetalL, versicolorPetalL): versicolorPetalL
+## coerced to factor.</code></pre>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
+##       Df F value Pr(&gt;F)
+## group 18  1.1053 0.3918
+##       31</code></pre>
+<pre class="r"><code>var.test(setosaPetalL, 
+         versicolorPetalL)</code></pre>
+<pre><code>## 
+##  F test to compare two variances
+## 
+## data:  setosaPetalL and versicolorPetalL
+## F = 0.13658, num df = 49, denom df = 49, p-value = 1.026e-10
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##  0.07750613 0.24068043
+## sample estimates:
+## ratio of variances 
+##          0.1365804</code></pre>
+<div id="prueba-de-t-de-dos-muestras" class="section level4">
+<h4>Prueba de t de dos muestras</h4>
+<pre class="r"><code>(setosaVersicolorPetal_L &lt;- t.test(setosaPetalL, 
+       versicolorPetalL,  # Valor de comparación
+       alternative = &quot;greater&quot;,# Tipo de Ha
+       var.equal = F # Varianzas iguales o no
+       ))</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  setosaPetalL and versicolorPetalL
+## t = -39.493, df = 62.14, p-value = 1
+## alternative hypothesis: true difference in means is greater than 0
+## 95 percent confidence interval:
+##  -2.916299       Inf
+## sample estimates:
+## mean of x mean of y 
+##     1.462     4.260</code></pre>
+<p>Por lo tanto, no rechazamos la HO: La longitud de los pétalos de la
+especie <em>Iris setosa</em> NO son en promedio más grandes que las de
+<em>I. versicolor</em>.</p>
+</div>
+</div>
+<div id="prueba-de-t-de-dos-muestras-dependientes"
+class="section level3">
+<h3>Prueba de t de dos muestras dependientes</h3>
+<p>Esta prueba nos permite saber si la media muestral es igual, menor o
+mayor después de un tratamiento o tiempo. Por ejemplo, la esperanza de
+vida promedio en América en 2002 será mayor o menor cinco años
+después?</p>
+<p>HO : La esperanza de vida de lxs americanxs en 2002 no es mayor que
+la del promedio cinco años después. Ha: La esperanza de vida promedio de
+lxs americanxs en 2002 es mayor cinco años después.</p>
+<pre class="r"><code># Seleccionamos los datos
+ amLifeExp2002 &lt;- gapm$lifeExp[gapm$continent == &quot;Americas&quot; &amp; gapm$year == 1992] 
+
+ amLifeExp2007 &lt;- amLifeExp
+ 
+# Comprobamos normalidad
+(amNorm &lt;- shapiro.test(amLifeExp2002))</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  amLifeExp2002
+## W = 0.94801, p-value = 0.226</code></pre>
+<pre class="r"><code># Comprobamos homogeneidad de varianzas
+var.test(amLifeExp2002, 
+         amLifeExp2007)</code></pre>
+<pre><code>## 
+##  F test to compare two variances
+## 
+## data:  amLifeExp2002 and amLifeExp2007
+## F = 1.3538, num df = 24, denom df = 24, p-value = 0.4636
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##  0.5965619 3.0720667
+## sample estimates:
+## ratio of variances 
+##           1.353764</code></pre>
+<pre class="r"><code># Se cumplen los supuestos</code></pre>
+<pre class="r"><code>#&quot; Hacemos la prueba
+t.test(amLifeExp2007, amLifeExp2002,
+       paired = T,
+       alternative = &quot;greater&quot;
+       )</code></pre>
+<pre><code>## 
+##  Paired t-test
+## 
+## data:  amLifeExp2007 and amLifeExp2002
+## t = 12.082, df = 24, p-value = 5.426e-12
+## alternative hypothesis: true mean difference is greater than 0
+## 95 percent confidence interval:
+##  3.467711      Inf
+## sample estimates:
+## mean difference 
+##         4.03976</code></pre>
+<p>Por lo tanto podemos afirmar que la esperanza de vida promedio en
+América fue mayor cinco años después.</p>
+</div>
+<div id="prueba-no-paramétrica" class="section level3">
+<h3>Prueba no paramétrica</h3>
+<p>En el caso de que nuestros datos no se cumplan el supuesto de
+normalidad podemos usar una prueba no paramétrica. Esta prueba en lugar
+de evaluar diferencias en las medias muestrales utiliza la mediana. La
+función es <code>wilcox.test()</code> y usa los mismos argumentos que
+<code>t.test()</code></p>
+<pre class="r"><code>#Prueba no paramétrica pareada
+wilcox.test(despues.prom, antes.prom, 
+           alternative = &quot;two.sided&quot;,
+           paired = T
+           )</code></pre>
+<footer>
+<p style="text-align: center; class="Copyright"> &copy Copyright Cursos Lic. Rubén Muñoz 2024</p>
+<p class="Copyright" style="text-align: center;">
+<em><a href="mailto:mrubenClasesR@gmail.com"
+class="email">mrubenClasesR@gmail.com</a></em>
+</p>
+</footer>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
