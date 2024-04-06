@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Rubén Muñoz" />
+
+<meta name="date" content="2024-02-16" />
+
+<title>Unidad 7.3: Prueba de correlación</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Temario.html">Contenido</a>
+</li>
+<li>
+  <a href="Instalacion.html">U1</a>
+</li>
+<li>
+  <a href="U2_Conceptos_básicos.html">U2</a>
+</li>
+<li>
+  <a href="U3_Estructuras_de_datos.html">U3</a>
+</li>
+<li>
+  <a href="U4_ImportarExportarDatos.html">U4</a>
+</li>
+<li>
+  <a href="U5.1_CondicionesBucles.html">U5</a>
+</li>
+<li>
+  <a href="U6_GraficosR.html">U6</a>
+</li>
+<li>
+  <a href="U7_tStudent.html">U7</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown-header">Rubén Muñoz</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Unidad 7.3: Prueba de correlación</h1>
+<h4 class="author">Rubén Muñoz</h4>
+<h4 class="date">2024-02-16</h4>
+
+</div>
+
+
+<div id="temario" class="section level2">
+<h2>Temario</h2>
+<ul>
+<li>
+<a href="U7_tStudent.html"> Unidad 7.1: t de Student</a>
+</li>
+<li>
+<a href="Unidad_7.2_ANOVA.html">Unidad 7.2: ANOVA</a>
+</li>
+<li>
+<a href="Unidad_7.3_Correlation.html">Unidad 7.3: Pruebas de correlación
+y Correlogramas</a>
+</li>
+</ul>
+<div id="bienvenida" class="section level3">
+<h3>Bienvenida</h3>
+<p>En esta Unidad 7.3 aprenderemos acerca de la prueba de correlación de
+Pearson. Esta es una prueba que se usa con datos continuos en la cual se
+calcula el grado de covariación entre variables relacionadas
+linealmente. Esta prueba nos dará un coeficiente de correlación, el cual
+nos indicará qué tanta correlación existe entre dos variables. La
+correlación puede ser positiva o negativa y su valor máximo es de 1 o
+-1, respectivamente.</p>
+<div style="text-align:center">
+<div class="float">
+<img src="imagenes/gatoTeclado.png" style="width:30.0%" alt=":)" />
+<div class="figcaption">:)</div>
+</div>
+</div>
+<p>En este caso trtaremos de ver si existen una correlación entre el PIB
+y la esperanza de vida mundial.</p>
+</div>
+<div id="correlación" class="section level3">
+<h3><strong>Correlación</strong></h3>
+<p>La prueba de correlación nos arrojará un coeficiente de correlación
+(r) y un valor de p, si el valor de <span class="math inline">\(p &lt;
+0.05\)</span> nos indica que la prueba es estadísticamente
+significativa. En cuanto al coeficiente se suele marcar un umbral del
+75% para considerar asociación entre variables.</p>
+<pre class="r"><code>#Paletas de color#Rampa de colores
+library(paletteer)
+library(colorBlindness)
+pal1 &lt;- paletteer_d(&quot;colorBlindness::Green2Magenta16Steps&quot;)
+pal2 &lt;- paletteer_c(&quot;ggthemes::Gold-Purple Diverging&quot;, 30)
+#Seleccionamos los datos
+library(gapminder)
+gapm &lt;- gapminder
+gapm2007 &lt;- gapm[gapm$year == &quot;2007&quot;, ]
+# Realizamos la prueba de correlación
+cor.test(gapm$gdpPercap, gapm$lifeExp)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  gapm$gdpPercap and gapm$lifeExp
+## t = 29.658, df = 1702, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.5515065 0.6141690
+## sample estimates:
+##       cor 
+## 0.5837062</code></pre>
+<p>La prueba es significativa con un coeficiente de r = 0.61</p>
+<pre class="r"><code># Graficamos las variables
+plot(log10(gapm2007$gdpPercap), gapm2007$lifeExp,
+     xlab = &quot;PIB mundial($)&quot;,
+     ylab = &quot;Esperanza de vida promedio (años)&quot;,
+     pch = 21, cex = 1.5,
+     bg = &quot;#85B47B&quot;, col = &quot;darkgreen&quot;,
+     bty = &quot;L&quot;)+ # Gráfico sin márgenes superior y derecho)
+text( x = 4.5, y = 42,  #Posición 
+       label = &quot; ρ = 0.78&quot;,
+       cex = 1.2
+      )</code></pre>
+<p><img src="Unidad_7.3_Correlation_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre><code>## integer(0)</code></pre>
+<p>No obstante,s iempre debemos verificar antes la normalidad de
+nuestros datos:</p>
+<pre class="r"><code>shapiro.test(gapm2007$gdpPercap)</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  gapm2007$gdpPercap
+## W = 0.80644, p-value = 2.039e-12</code></pre>
+<pre class="r"><code>shapiro.test(gapm2007$lifeExp)</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  gapm2007$lifeExp
+## W = 0.89467, p-value = 1.357e-08</code></pre>
+<p>Nuestros datos no siguen una distribución normal, por lo que usaremos
+la prueba no paramétrica de Spearman:</p>
+<pre class="r"><code>cor.test(gapm$gdpPercap, gapm$lifeExp,
+         method = &quot;spearman&quot;)</code></pre>
+<pre><code>## Warning in cor.test.default(gapm$gdpPercap, gapm$lifeExp, method = &quot;spearman&quot;):
+## Cannot compute exact p-value with ties</code></pre>
+<pre><code>## 
+##  Spearman&#39;s rank correlation rho
+## 
+## data:  gapm$gdpPercap and gapm$lifeExp
+## S = 143096490, p-value &lt; 2.2e-16
+## alternative hypothesis: true rho is not equal to 0
+## sample estimates:
+##       rho 
+## 0.8264712</code></pre>
+<p>La prueba es significativa con un coeficiente de rho = 0.82.</p>
+</div>
+<div id="correlograma" class="section level3">
+<h3><strong>Correlograma</strong></h3>
+<p>A veces es necesario evaluar la correlación entre una o más
+variables. Para ello podemos generar una matriz de correlación y verla
+visualemente en R (correlograma). Para ello usamos las siguientes
+librerías:</p>
+<pre class="r"><code>#Una vez instaladas, cargar las librerias
+library(ggplot2)
+library(corrplot)</code></pre>
+<pre><code>## corrplot 0.92 loaded</code></pre>
+<pre class="r"><code>library(mvnormtest)</code></pre>
+Pasra esta sección usaremos un ejemplo de aplicación en el modelado de
+distribución potencial de especies. En este estudio realizaremos una
+matriz de correlación de variables ambientales relacionadas con la
+distribución de la coqueta de Guerrero (<em>𝘓𝘰𝘱𝘩𝘰𝘳𝘯𝘪𝘴
+𝘣𝘳𝘢𝘤𝘩𝘺𝘭𝘰𝘱𝘩𝘶𝘴</em>). Esta una especie de la familia Trochilidae
+(colibríes). La especie es endémica de México. Su sobrevivencia está
+amenazada por la pérdida de hábitat. En México, la NOM-059-SEMARNAT-2010
+la considera En Peligro de Extinción y la UICN como En Peligro
+Crítico.<br />
+
+<div style="text-align:center">
+<div class="float">
+<img src="imagenes/coqueta.jpg" style="width:60.0%"
+alt="Coqueta de Guerrero" />
+<div class="figcaption">Coqueta de Guerrero</div>
+</div>
+</div>
+<p>Las variables ambientales se recabaron de <a
+href="https://www.worldclim.org/">WorldClim</a> la cual es una base de
+datos climáticos históricos a nivel mundial. Además, de la altitud
+registrada en un Modelo de Elevación Digital (DEM) hecho por <a
+href="https://www.inegi.org.mx/">INEGI</a> (mexdem). A partir de esta
+matriz de correlación podemos elegir las variables óptimas para contruir
+nuestro modelo de distribución de la especie.</p>
+<div id="supuestos" class="section level4">
+<h4>Supuestos</h4>
+<p>En el caso de que tengamos más de dos variables podemos usar la
+librería <em>mvnormtest</em> para calcular la normalidad de múltiples
+datos. Los datos deben ser de clase <em>matrix</em></p>
+<pre class="r"><code>#Seleccionamos los datos
+LBrachyVar &lt;- read.csv(&quot;../data/LophornisBrachylophusVariables.csv&quot;,
+                       header = T)
+
+#Aplicar la prueba de normalidad de Shapiro-Wilk
+#es necesario transponer (t) los datos
+mshapiro.test(t(LBrachyVar))</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  Z
+## W = 0.37401, p-value = 3.964e-07</code></pre>
+<p>Como los datos no cunmplen el supuesto de normalidad usaremos la
+prueba de Spearman.</p>
+<pre class="r"><code>par(mfrow = c(3,2))
+#Genera el gráfico de correlación
+mt.cor &lt;- cor(LBrachyVar, method=&quot;spearman&quot;)
+
+# A) Gráfico por default
+corrplot(mt.cor,
+         main = &quot;A) Default&quot;)
+
+# B) Gráfico por método = color
+corrplot(mt.cor, method = &#39;color&#39;, #Colorea los cuadros
+         order = &#39;alphabet&#39;,#orden alfabético
+         tl.cex = 0.5, tl.col = &quot;black&quot;, #Tamaño y color de las etiquetas
+         number.cex=0.55, addCoef.col = &#39;black&#39;, # Añadir coeficiente de correlación
+         diag = F,
+         main = &quot;B) Method = color&quot;
+         ) 
+
+# C) Gráfico por método = pie  y upper
+corrplot(mt.cor, method = &#39;pie&#39;, #Colorea las gráficas de pie
+         type = &quot;upper&quot;, # Muestra solo la región de arriba
+         order = &#39;alphabet&#39;,#orden alfabético
+         tl.cex = 0.5, tl.col = &quot;black&quot;, #Tamaño y color de las etiquetas
+         cl.cex=0.7, #Tamaño de la simbología
+         addCoef.col = &#39;black&#39;, # Añadir coeficiente de correlación
+         number.digits = 1,
+         number.cex=0.55,
+         main = &quot;C) Pie + upper&quot;
+         ) 
+
+# D) Otra forma del grafico: ellipse
+corrplot(mt.cor, method=&quot;ellipse&quot;,
+         tl.cex=0.4, tl.col = &quot;black&quot;, 
+         tl.srt = 45, 
+         cl.cex=0.6,
+         col = COL2(&#39;PiYG&#39;),
+         addCoef.col = &#39;black&#39;,
+         number.cex=0.55,
+         main = &quot;D) ellipse+rampadecolores&quot;
+         )
+
+# E) Leyenda inferior, diagonal con nombres
+corrplot(mt.cor, order = &quot;alphabet&quot;,
+         method = &quot;square&quot;,
+         cl.pos = &#39;b&#39;, # Leyenda en bottom
+         col = pal1, 
+         diag = FALSE, 
+         tl.cex = 0.5,
+         tl.pos = &quot;d&quot;, #Nombre de variables en la diagonal
+         bg = &quot;gray90&quot;, #Color de fondo
+         main = &quot;E) square+rampadecolores&quot;
+         )
+
+# F) Incorporando el valor de p 
+ pvalueCorr &lt;- cor.mtest(LBrachyVar, conf.level = 0.95)
+ 
+ corrplot(mt.cor,
+         method = &quot;color&quot;,
+         type = &quot;lower&quot;,
+         p.mat = pvalueCorr$p,
+         sig.level = 0.05,
+         insig = &quot;blank&quot;,
+         diag = FALSE,
+         addCoef.col = &#39;black&#39;, # Añadir coeficiente de correlación
+         number.digits = 2, # Num. digitos del coef
+         number.cex = 0.7, #Tamaño del coef
+         tl.col = &quot;black&quot;,
+         tl.srt = 0, # Ángulo de las variables
+         cl.pos = &#39;b&#39;, # Leyenda en bottom
+         col = COL2(&#39;PiYG&#39;), #Nombre de variables en la diagonal
+         bg = &quot;gray95&quot;, #Color de fondo
+         addgrid.col = &#39;gray95&#39;,#Color de líneas
+         main = &quot;F) valores de p&quot;
+         )</code></pre>
+<p><img src="Unidad_7.3_Correlation_files/figure-html/unnamed-chunk-7-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<p>De esta forma podemos generar gráficos con calidad para colocar en
+artículos y que nos permiten avanzar en nuestra investigación. Gracias a
+este correlograma podemos contruir un modelo para destinar zonas
+prioritarias de conservación para la coqueta de Guerrero.</p>
+<hr />
+<p>Hemos terminado esta lección. Le agradezco su participación y espero
+que las herramientas vistas en este curso les sean de gran utilidad en
+su vida profesional y académica.</p>
+<div style="text-align:center">
+<div class="float">
+<img
+src="imagenes/Default_create_a_cute_kitty_waving_his_paw_saying_goodbye_2.jpg"
+style="width:80.0%" alt="Byebye:)" />
+<div class="figcaption">Byebye:)</div>
+</div>
+</div>
+<footer>
+<p style="text-align: center; class="Copyright"> &copy Copyright Cursos Lic. Rubén Muñoz 2024</p>
+<p class="Copyright" style="text-align: center;">
+<em><a href="mailto:mrubenClasesR@gmail.com"
+class="email">mrubenClasesR@gmail.com</a></em>
+</p>
+</footer>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

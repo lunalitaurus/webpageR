@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Rubén Muñoz" />
+
+<meta name="date" content="2024-02-12" />
+
+<title>Unidad 7.2: ANOVA</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Temario.html">Contenido</a>
+</li>
+<li>
+  <a href="Instalacion.html">U1</a>
+</li>
+<li>
+  <a href="U2_Conceptos_básicos.html">U2</a>
+</li>
+<li>
+  <a href="U3_Estructuras_de_datos.html">U3</a>
+</li>
+<li>
+  <a href="U4_ImportarExportarDatos.html">U4</a>
+</li>
+<li>
+  <a href="U5.1_CondicionesBucles.html">U5</a>
+</li>
+<li>
+  <a href="U6_GraficosR.html">U6</a>
+</li>
+<li>
+  <a href="U7_tStudent.html">U7</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown-header">Rubén Muñoz</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Unidad 7.2: ANOVA</h1>
+<h4 class="author">Rubén Muñoz</h4>
+<h4 class="date">2024-02-12</h4>
+
+</div>
+
+
+<div id="temario" class="section level2">
+<h2>Temario</h2>
+<ul>
+<li>
+<a href="U7_tStudent.html"> Unidad 7.1: t de Student</a>
+</li>
+<li>
+<a href="Unidad_7.2_ANOVA.html">Unidad 7.2: ANOVA</a>
+</li>
+<li>
+<a href="Unidad_7.3_Correlation.html">Unidad 7.3: Pruebas de correlación
+y Correlogramas</a>
+</li>
+</ul>
+</div>
+<div id="bienvenida" class="section level2">
+<h2><strong>Bienvenida</strong></h2>
+<p>El ANOVA (Análisis de Varianza) es una prueba estadística utilizada
+para comparar las medias de tres o más grupos independientes. Se utiliza
+para determinar si hay diferencias significativas entre los grupos con
+base en las variaciones observadas entre ellos. ANOVA divide la
+variabilidad total en dos componentes: la variabilidad dentro de los
+grupos y la variabilidad debida a diferencias entre los grupos.</p>
+<p>Al igual que la prueba de t de Student, ANOVA asume que los datos
+siguen una distribución normal. Sin embargo, esta , la suposición
+principal es que los residuos (las diferencias entre los valores
+observados y los valores esperados por el modelo) siguen una
+distribución normal. Además de que supone igualdad de varianzas.</p>
+<p>Por ejemplo, si queremos saber si la población mundial promedio en
+2007 es diferente por continente.</p>
+<pre class="r"><code># Cagamos los datos
+# Cargar el paquete
+library(&quot;gapminder&quot;)
+
+# Cargar los datos de Gapminder
+gapm &lt;- gapminder
+gapm2007 &lt;- gapm[gapm$year == &quot;2007&quot;, ]
+#Rampa de colores
+library(paletteer)
+library(colorBlindness)
+pal1 &lt;- paletteer_d(&quot;colorBlindness::Blue2Orange10Steps&quot;)
+
+### Observamos los datos
+namesContinent &lt;- c( &quot;África&quot;, &quot;América&quot;,
+                     &quot;Asia&quot;, &quot;Europa&quot;,
+                     &quot;Oceanía&quot;)
+boxplot(gapm2007$pop ~ gapm2007$continent, 
+        xlab = &quot;Continentes&quot;, 
+        ylab = &quot;Esperanza de vida promedio en 2007&quot;,
+        names = namesContinent,
+        col = pal1, border = &quot;blue4&quot;,
+        outpch = 20
+        )</code></pre>
+<pre><code>## Warning in x[floor(d)] + x[ceiling(d)]: NAs produced by integer overflow</code></pre>
+<p><img src="Unidad_7.2_ANOVA_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+<div id="anova" class="section level2">
+<h2><strong>ANOVA</strong></h2>
+<div id="anova-de-una-vía" class="section level3">
+<h3><strong>ANOVA de una vía</strong></h3>
+<p>En el ANOVA de una vía se tiene un solo factor categórico que divide
+los datos en grupos.</p>
+<p>Para realizar un anova usamos la función <code>aov()</code>:</p>
+<pre class="r"><code>#### Realizamos la prueba
+ popANOVA &lt;- aov(pop ~ continent, 
+                     data = gapm2007
+                     )
+ summary(popANOVA)   </code></pre>
+<pre><code>##              Df    Sum Sq   Mean Sq F value Pr(&gt;F)  
+## continent     4 2.258e+17 5.646e+16   2.717 0.0323 *
+## Residuals   137 2.847e+18 2.078e+16                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="verificación-de-supuestos" class="section level3">
+<h3><strong>Verificación de supuestos</strong></h3>
+<div id="normalidad" class="section level4">
+<h4>Normalidad</h4>
+<p>Para verificar este supuesto, comprobaremos que los residuos del
+modelo tengan una <span class="math inline">\(p&gt;0.05\)</span></p>
+<pre class="r"><code> shapiro.test(popANOVA$residuals)</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  popANOVA$residuals
+## W = 0.36038, p-value &lt; 2.2e-16</code></pre>
+</div>
+<div id="homocedasticidad" class="section level4">
+<h4>Homocedasticidad</h4>
+<p>Para verificar este supuesto, comprobaremos que la prueba
+<code>bartlett.test()</code> tenga una <span
+class="math inline">\(p&gt;0.05\)</span></p>
+<pre class="r"><code># Realizamos la prueba
+bartlett.test(gapm2007$pop ~ gapm2007$continent)</code></pre>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  gapm2007$pop by gapm2007$continent
+## Bartlett&#39;s K-squared = 255.92, df = 4, p-value &lt; 2.2e-16</code></pre>
+<p>En este caso, no se cumplen los supuestos. No obstante, podemos
+aplicar una transformación de los datos para saber si de esta forma se
+cumplen. Las transformaciones son muy usadas en las pruebas de
+hipótesis. Dependiendo la naturaleza de nuestros datos, deberemos
+transformarlos. Las más usadas son logaritmos o raíz cuadrada.</p>
+<pre class="r"><code># Transformamos la columna que nos interesa
+gapm2007$pop &lt;- log10(gapm2007$pop)
+# Realizamos la prueba de Shapiro y Barlett para comprobar ahora
+popANOVA &lt;- aov(pop ~ continent, 
+                     data = gapm2007
+                     )
+shapPop &lt;- shapiro.test(popANOVA$residuals)
+barlPop &lt;- bartlett.test(gapm2007$pop ~ gapm2007$continent)
+#Definimos un umbral de p
+umbral &lt;- 0.05
+# Comprobamos si es mayor al umbral
+if (shapPop$p.value &amp; barlPop$p.value &gt; umbral) {
+  &quot;Cumple los supuestos&quot;
+}</code></pre>
+<pre><code>## [1] &quot;Cumple los supuestos&quot;</code></pre>
+<p>Se cumplen los supuestos. Por lo que podemos seguir siendo felices y
+hacer una prueba post-hoc</p>
+</div>
+</div>
+<div id="prueba-post-hoc" class="section level3">
+<h3>Prueba post-hoc</h3>
+<p>Esta prueba nos permite saber cuál grupo es diferente o igual a otros
+grupos. En esta prueba nos fijaremos en que las comparaciones tenga un
+valor de <span class="math inline">\(p&lt;0.05\)</span></p>
+<pre class="r"><code># Realizamos la prueba
+popTukey &lt;- TukeyHSD(popANOVA)
+# Extraemos los datos
+valorpTukeyOneway &lt;- popTukey[[&quot;continent&quot;]]
+# Verificamos que p&lt;0.05
+ifelse(valorpTukeyOneway[ , &quot;p adj&quot;]  &lt; umbral, 
+       &quot;Significativo&quot;, &quot;NO&quot;)</code></pre>
+<pre><code>##  Americas-Africa      Asia-Africa    Europe-Africa   Oceania-Africa 
+##             &quot;NO&quot;  &quot;Significativo&quot;             &quot;NO&quot;             &quot;NO&quot; 
+##    Asia-Americas  Europe-Americas Oceania-Americas      Europe-Asia 
+##             &quot;NO&quot;             &quot;NO&quot;             &quot;NO&quot;             &quot;NO&quot; 
+##     Oceania-Asia   Oceania-Europe 
+##             &quot;NO&quot;             &quot;NO&quot;</code></pre>
+<p>De esta prueba podemos concluir que la población promedio de África y
+Asia son diferentes entre sí. Por lo que podemos verlo de forma visual
+de la siguiente forma:</p>
+<pre class="r"><code>boxplot(gapm2007$pop ~ gapm2007$continent, 
+        xlab = &quot;Continentes&quot;, 
+        ylab = &quot;Población mundial 2007 (log10)&quot;,
+        names = namesContinent,
+        ylim = c(5, 9.5),
+        col = c(&quot;#B393C0&quot;, &quot;#99caea&quot;, &quot;#85B47B&quot;,&quot;#7fb1e0&quot;, 
+                &quot;#6598d5&quot; ), 
+        border = c( &quot;#54278F&quot;,&quot;#045A9f&quot;, &quot;#014636&quot;,
+                    &quot;#045A9f&quot;, &quot;#045A9f&quot;),
+        lwd = 1,
+        outpch = 20
+        ) 
+  text(x = c(1:5), y= 9.4,
+       labels= c(&quot;A&quot;, &quot;AB&quot;, &quot;B&quot;,
+                 &quot;AB&quot;, &quot;AB&quot;))</code></pre>
+<div style="text-align:center">
+<p><img src="imagenes/pop2007Anova.png" style="width:90.0%" /></p>
+</div>
+<p>Otra forma de hacerlo es con la prueba de Kruskal-Wallis, la cual es
+la prueba NO paramétrica de este ANOVA. Ejemplo:</p>
+<pre class="r"><code>gapm2007nonParametric &lt;- gapm[gapm$year == &quot;2007&quot;, ]
+kruskal.test(pop ~ continent, 
+                     data = gapm2007nonParametric)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  pop by continent
+## Kruskal-Wallis chi-squared = 9.8004, df = 4, p-value = 0.04393</code></pre>
+<p>El test nos indica que al menos dos de nuestros grupos difieren entre
+sí. Para saber entre cuales hay diferencias significativas (análogo a
+Tukey)</p>
+<pre class="r"><code>pairwise.wilcox.test(gapm2007nonParametric$pop, gapm2007nonParametric$continent, 
+                     p.adjust.method = &quot;holm&quot; )</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+## 
+## data:  gapm2007nonParametric$pop and gapm2007nonParametric$continent 
+## 
+##          Africa Americas Asia  Europe
+## Americas 1.000  -        -     -     
+## Asia     0.019  1.000    -     -     
+## Europe   1.000  1.000    0.265 -     
+## Oceania  1.000  1.000    1.000 1.000 
+## 
+## P value adjustment method: holm</code></pre>
+<p>Al igula que con los datos transformados, la prueba no paramétrica
+nos indica que África y Asia tienen poblaciones promedio diferentes
+entre sí.</p>
+</div>
+<div id="anova-de-dos-vías" class="section level3">
+<h3><strong>ANOVA de dos vías</strong></h3>
+<p>En ANOVA de dos vías, hay dos factores categóricos que se consideran
+simultáneamente. Permite examinar las interacciones entre los dos
+factores, así como los efectos principales de cada uno. El efecto de los
+factores puede ser aditivo (+) o multiplicativo (*).<br />
+El ANOVA de dos vías permite estudiar cómo influyen por sí solos cada
+uno de los factores sobre la variable dependiente (modelo aditivo) así
+como la influencia de las combinaciones que se pueden dar entre ellas
+(modelo con interacción).</p>
+<div id="anova-dos-vías-aditivo" class="section level4">
+<h4>ANOVA dos vías aditivo</h4>
+<pre class="r"><code>#Seleccionamos nuestros datos
+gapm2k2_7 &lt;- gapm[gapm$year == &quot;2002&quot; | gapm$year == &quot;2007&quot;, ]
+# Transformamos la columna que nos interesa
+gapm2k2_7$pop &lt;- log10(gapm2k2_7$pop)
+gapm2k2_7$year &lt;- as.factor(gapm2k2_7$year)
+
+# Realizamos la prueba
+popANOVAAdd &lt;- aov(pop ~ continent+year,
+                         data = gapm2k2_7
+                         )
+summary(popANOVAAdd)</code></pre>
+<pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## continent     4  11.82  2.9554   7.322 1.28e-05 ***
+## year          1   0.07  0.0728   0.180    0.671    
+## Residuals   278 112.21  0.4036                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Visualizamos los datos</p>
+<pre class="r"><code># boxplot
+boxplot(pop ~ continent * year,
+        data = gapm2k2_7,
+        names=rep(namesContinent, 2),
+        col = c(&quot;#B393C0&quot;, &quot;#99caea&quot;,&quot;#85B47B&quot;,
+                &quot;#7fb1e0&quot;,&quot;#6598d5&quot; ), 
+        border = c( &quot;#54278F&quot;,&quot;#045A9f&quot;, &quot;#014636&quot;,
+                    &quot;#045A9f&quot;, &quot;#045A9f&quot;),
+        lwd = 1,
+        lty = sort(rep(c(1,5),5)),
+        outpch = 20)  +
+ text(x=c(3,8), y=5.4, label= c(&quot;2002&quot;, &quot;2007&quot;))+
+ abline( v = 5.5, col = &quot;gray70&quot;)</code></pre>
+<div style="text-align:center">
+<p><img src="imagenes/anova2ViasBoxplot.png"
+style="width:90.0%" /></p>
+</div>
+</div>
+</div>
+<div id="verificación-de-supuestos-1" class="section level3">
+<h3>Verificación de supuestos</h3>
+<div id="normalidad-1" class="section level4">
+<h4>Normalidad</h4>
+<p>Para verificar este supuesto, comprobaremos que los residuos del
+modelo tengan una <span class="math inline">\(p&gt;0.05\)</span></p>
+<pre class="r"><code> shapiro.test(popANOVAAdd$residuals)</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  popANOVAAdd$residuals
+## W = 0.99451, p-value = 0.3997</code></pre>
+</div>
+<div id="homocedasticidad-1" class="section level4">
+<h4>Homocedasticidad</h4>
+<p>Para verificar este supuesto, comprobaremos que la prueba
+<code>bartlett.test()</code> tenga una <span
+class="math inline">\(p&gt;0.05\)</span></p>
+<pre class="r"><code># Realizamos la prueba en función del continente
+bartlett.test(pop ~ continent, data = gapm2k2_7)</code></pre>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  pop by continent
+## Bartlett&#39;s K-squared = 6.3656, df = 4, p-value = 0.1735</code></pre>
+<pre class="r"><code>#Realizamos la prueba en función de los ingresos
+bartlett.test(pop ~ year, data = gapm2k2_7)</code></pre>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  pop by year
+## Bartlett&#39;s K-squared = 0.00053081, df = 1, p-value = 0.9816</code></pre>
+</div>
+</div>
+<div id="prueba-post-hoc-1" class="section level3">
+<h3>Prueba post-hoc</h3>
+<p>Esta prueba nos permite saber cuál grupo es diferente o igual a otros
+grupos. En esta prueba nos fijaremos en que las comparaciones tenga un
+valor de <span class="math inline">\(p&lt;0.05\)</span></p>
+<pre class="r"><code># Realizamos la prueba
+popANOVAAddTukey &lt;- TukeyHSD(popANOVAAdd)
+# Extraemos los datos
+valorpTukeyTwoWay &lt;- popANOVAAddTukey[[&quot;continent&quot;]]
+# Verificamos que p&lt;0.05
+ifelse(valorpTukeyTwoWay[ , &quot;p adj&quot;]  &lt; 0.05, 
+       &quot;Significativo&quot;, &quot;NO&quot;)</code></pre>
+<p>En este caso la población promedio de Asia durante 2002-2007 fue
+diferente de África y Europa, sin embargo el factor Año no es
+significativo para el modelo.</p>
+<div id="anova-dos-vías-multiplicativo" class="section level4">
+<h4>ANOVA dos vías multiplicativo</h4>
+<pre class="r"><code># Realizamos la prueba *
+popANOVAMult &lt;- aov(pop ~ continent*year,
+                         data = gapm2k2_7
+                         )
+summary(popANOVAMult)</code></pre>
+<pre><code>##                 Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## continent        4  11.82  2.9554   7.218 1.54e-05 ***
+## year             1   0.07  0.0728   0.178    0.674    
+## continent:year   4   0.02  0.0042   0.010    1.000    
+## Residuals      274 112.20  0.4095                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+<div id="verificación-de-supuestos-2" class="section level3">
+<h3>Verificación de supuestos</h3>
+<div id="normalidad-2" class="section level4">
+<h4>Normalidad</h4>
+<p>Para verificar este supuesto, comprobaremos que los residuos del
+modelo tengan una <span class="math inline">\(p&gt;0.05\)</span></p>
+<pre class="r"><code> shapiro.test(popANOVAMult$residuals)</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  popANOVAMult$residuals
+## W = 0.99436, p-value = 0.3758</code></pre>
+</div>
+<div id="homocedasticidad-2" class="section level4">
+<h4>Homocedasticidad</h4>
+<p>Para verificar este supuesto, comprobaremos que la prueba
+<code>bartlett.test()</code> tenga una <span
+class="math inline">\(p&gt;0.05\)</span></p>
+<pre class="r"><code># Realizamos la prueba en función del continente
+bartlett.test(pop ~ continent, data = gapm2k2_7)</code></pre>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  pop by continent
+## Bartlett&#39;s K-squared = 6.3656, df = 4, p-value = 0.1735</code></pre>
+<pre class="r"><code>#Realizamos la prueba en función de los ingresos
+bartlett.test(pop ~ year, data = gapm2k2_7)</code></pre>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  pop by year
+## Bartlett&#39;s K-squared = 0.00053081, df = 1, p-value = 0.9816</code></pre>
+<pre class="r"><code># Para este caso tmb podemos usar levene
+library(car)
+leveneTest(pop ~ continent*year, data = gapm2k2_7)</code></pre>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
+##        Df F value Pr(&gt;F)
+## group   9  0.5591   0.83
+##       274</code></pre>
+</div>
+</div>
+<div id="prueba-post-hoc-2" class="section level3">
+<h3>Prueba post-hoc</h3>
+<p>Esta prueba nos permite saber cuál grupo es diferente o igual a otros
+grupos. En esta prueba nos fijaremos en que las comparaciones tenga un
+valor de <span class="math inline">\(p&lt;0.05\)</span></p>
+<pre class="r"><code># Realizamos la prueba
+popANOVAMultTukey &lt;- TukeyHSD(popANOVAMult)
+# Extraemos los datos
+valorpTukeyTwoWayM &lt;- popANOVAMultTukey[[&quot;continent&quot;]]
+# Verificamos que p&lt;0.05
+ifelse(valorpTukeyTwoWayM[ , &quot;p adj&quot;]  &lt; 0.05, 
+       &quot;Significativo&quot;, &quot;NO&quot;)</code></pre>
+<p>Igualmente en este caso la población promedio de Asia durante
+2002-2007 fue diferente de África y Europa. Sin embargo, el factor Año
+no es significativo para el modelo.</p>
+<footer>
+<p style="text-align: center; class="Copyright"> &copy Copyright Cursos Lic. Rubén Muñoz 2024</p>
+<p class="Copyright" style="text-align: center;">
+<em><a href="mailto:mrubenClasesR@gmail.com"
+class="email">mrubenClasesR@gmail.com</a></em>
+</p>
+</footer>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
